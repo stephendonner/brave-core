@@ -112,9 +112,8 @@ IpfsService::IpfsService(content::BrowserContext* context,
                user_prefs::UserPrefs::Get(context)),
       weak_factory_(this) {
   DCHECK(!user_data_dir.empty());
-  url_loader_factory_ =
-      content::BrowserContext::GetDefaultStoragePartition(context)
-          ->GetURLLoaderFactoryForBrowserProcess();
+  url_loader_factory_ = context->GetDefaultStoragePartition()
+                            ->GetURLLoaderFactoryForBrowserProcess();
 
   // Return early since g_brave_browser_process and ipfs_client_updater are not
   // available in unit tests.
