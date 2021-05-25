@@ -100,6 +100,7 @@ ads::DBCommandResponsePtr RunDBTransactionOnTaskRunner(
 @property(nonatomic) BOOL networkConnectivityAvailable;
 @property(nonatomic, copy) NSString* storagePath;
 @property(nonatomic) dispatch_queue_t prefsWriteThread;
+@property(nonatomic) dispatch_group_t prefsWriteGroup;
 @property(nonatomic) NSMutableDictionary* prefs;
 @property(nonatomic, copy) NSDictionary* adsResourceMetadata;
 @property(nonatomic) NSTimer* updateAdsResourceTimer;
@@ -118,6 +119,7 @@ ads::DBCommandResponsePtr RunDBTransactionOnTaskRunner(
 
     self.prefsWriteThread =
         dispatch_queue_create("com.rewards.ads.prefs", DISPATCH_QUEUE_SERIAL);
+    self.prefsWriteGroup = dispatch_group_create();
     self.prefs =
         [[NSMutableDictionary alloc] initWithContentsOfFile:[self prefsPath]];
     if (!self.prefs) {
@@ -287,26 +289,28 @@ BATClassAdsBridge(BOOL, isDebug, setDebug, g_is_debug)
 
 - (void)shutdown:(nullable void (^)())completion {
   if ([self isAdsServiceRunning]) {
-    ads->Shutdown(^(bool) {
-      if (ads != nil) {
-        delete ads;
-      }
-      if (adsClient != nil) {
-        delete adsClient;
-      }
-      if (adsDatabase != nil) {
-        delete adsDatabase;
-      }
-      if (adEventHistory != nil) {
-        delete adEventHistory;
-      }
-      ads = nil;
-      adsClient = nil;
-      adsDatabase = nil;
-      adEventHistory = nil;
-      if (completion) {
-        completion();
-      }
+    dispatch_group_notify(self.prefsWriteGroup, dispatch_get_main_queue(), ^{
+      self->ads->Shutdown(^(bool) {
+        if (ads != nil) {
+          delete ads;
+        }
+        if (adsClient != nil) {
+          delete adsClient;
+        }
+        if (adsDatabase != nil) {
+          delete adsDatabase;
+        }
+        if (adEventHistory != nil) {
+          delete adEventHistory;
+        }
+        ads = nil;
+        adsClient = nil;
+        adsDatabase = nil;
+        adEventHistory = nil;
+        if (completion) {
+          completion();
+        }
+      });
     });
   } else {
     if (completion) {
@@ -394,8 +398,10 @@ BATClassAdsBridge(BOOL, isDebug, setDebug, g_is_debug)
 - (void)savePrefs {
   NSDictionary* prefs = [self.prefs copy];
   NSString* path = [[self prefsPath] copy];
+  dispatch_group_enter(self.prefsWriteGroup);
   dispatch_async(self.prefsWriteThread, ^{
     [prefs writeToURL:[NSURL fileURLWithPath:path isDirectory:NO] error:nil];
+    dispatch_group_leave(self.prefsWriteGroup);
   });
 }
 
