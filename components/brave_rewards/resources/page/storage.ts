@@ -29,7 +29,6 @@ export const defaultState: Rewards.State = {
     paymentIdCheck: true,
     walletRecoveryStatus: null,
     walletServerProblem: false,
-    verifyOnboardingDisplayed: false,
     promosDismissed: {}
   },
   autoContributeList: [],
@@ -88,15 +87,6 @@ const cleanData = (state: Rewards.State) => {
 
   if (!state.parameters) {
     state.parameters = defaultState.parameters
-  }
-
-  // Name change: onBoardingDisplayed -> verifyOnboardingDisplayed
-  if (state.ui.verifyOnboardingDisplayed === undefined) {
-    const { ui } = state as any
-    if (ui.onBoardingDisplayed) {
-      ui.verifyOnboardingDisplayed = true
-      ui.onBoardingDisplayed = undefined
-    }
   }
 
   state.ui.modalRedirect = 'hide'
