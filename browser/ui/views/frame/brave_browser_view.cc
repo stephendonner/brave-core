@@ -9,6 +9,8 @@
 
 #include "brave/browser/sparkle_buildflags.h"
 #include "brave/browser/translate/buildflags/buildflags.h"
+#include "brave/browser/ui/reader_mode/brave_reader_mode_bubble_controller.h"
+#include "brave/browser/ui/views/reader_mode/brave_reader_mode_bubble.h"
 #include "brave/browser/ui/views/toolbar/bookmark_button.h"
 #include "brave/browser/ui/views/toolbar/brave_toolbar_view.h"
 #include "brave/components/brave_wallet/common/buildflags/buildflags.h"
@@ -215,6 +217,18 @@ ShowTranslateBubbleResult BraveBrowserView::ShowTranslateBubble(
   }
 #endif
   return ShowTranslateBubbleResult::BROWSER_WINDOW_NOT_VALID;
+}
+
+BraveReaderModeBubble* BraveBrowserView::ShowReaderModeBubble(
+    content::WebContents* contents,
+    BraveReaderModeBubbleController* controller) {
+  BraveReaderModeBubble* bubble =
+      new BraveReaderModeBubble(GetLocationBarView(), contents, controller);
+  // fixme: highlight the button
+  views::BubbleDialogDelegateView::CreateBubble(bubble);
+  bubble->Show();
+
+  return bubble;
 }
 
 WalletButton* BraveBrowserView::GetWalletButton() {

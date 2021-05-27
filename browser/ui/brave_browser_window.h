@@ -13,11 +13,18 @@ namespace sidebar {
 class Sidebar;
 }  // namespace sidebar
 
+class BraveReaderModeBubble;
+class BraveReaderModeBubbleController;
+
 class BraveBrowserWindow : public BrowserWindow {
  public:
   ~BraveBrowserWindow() override {}
 
   virtual void StartTabCycling() = 0;
+
+  virtual BraveReaderModeBubble* ShowReaderModeBubble(
+      content::WebContents* contents,
+      BraveReaderModeBubbleController* controller) = 0;
 
 #if BUILDFLAG(ENABLE_SIDEBAR)
   virtual sidebar::Sidebar* InitSidebar() = 0;

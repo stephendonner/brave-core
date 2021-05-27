@@ -12,12 +12,15 @@
 #include "brave/browser/ui/tabs/brave_tab_strip_model.h"
 #include "brave/components/sidebar/buildflags/buildflags.h"
 #include "chrome/browser/ui/views/frame/browser_view.h"
+#include "content/public/browser/web_contents.h"
 
 #if BUILDFLAG(ENABLE_SIDEBAR)
 class ContentsLayoutManager;
 class SidebarContainerView;
 #endif
 
+class BraveReaderModeBubble;
+class BraveReaderModeBubbleController;
 class WalletButton;
 
 class BraveBrowserView : public BrowserView {
@@ -34,6 +37,9 @@ class BraveBrowserView : public BrowserView {
       const std::string& target_language,
       translate::TranslateErrors::Type error_type,
       bool is_user_gesture) override;
+  BraveReaderModeBubble* ShowReaderModeBubble(
+      content::WebContents* contents,
+      BraveReaderModeBubbleController* controller) override;
   void CreateWalletBubble();
   void CloseWalletBubble();
   WalletButton* GetWalletButton();

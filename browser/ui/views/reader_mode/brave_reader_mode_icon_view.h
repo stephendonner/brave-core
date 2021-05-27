@@ -6,16 +6,35 @@
 #ifndef BRAVE_BROWSER_UI_VIEWS_READER_MODE_BRAVE_READER_MODE_ICON_VIEW_H_
 #define BRAVE_BROWSER_UI_VIEWS_READER_MODE_BRAVE_READER_MODE_ICON_VIEW_H_
 
-#include "chrome/browser/ui/views/reader_mode/reader_mode_icon_view.h"
+#include "chrome/browser/ui/views/page_action/page_action_icon_view.h"
+#include "ui/views/metadata/metadata_header_macros.h"
 
+class PrefService;
 
-class BraveReaderModeIconView : public ReaderModeIconView {
+class BraveReaderModeIconView : public PageActionIconView {
  public:
-    using ReaderModeIconView::ReaderModeIconView;
- protected:
-    void UpdateImpl() override;
+  METADATA_HEADER(BraveReaderModeIconView);
+  BraveReaderModeIconView(
+      CommandUpdater* command_updater,
+      IconLabelBubbleView::Delegate* icon_label_bubble_delegate,
+      PageActionIconView::Delegate* page_action_icon_delegate,
+      PrefService* pref_service);
+  BraveReaderModeIconView(const BraveReaderModeIconView&) = delete;
+  BraveReaderModeIconView& operator=(const BraveReaderModeIconView&) = delete;
+  ~BraveReaderModeIconView() override;
 
-  DISALLOW_COPY_AND_ASSIGN(BraveReaderModeIconView);
+  // PageActionIconView:
+  views::BubbleDialogDelegate* GetBubble() const override;
+  std::u16string GetTextForTooltipAndAccessibleName() const override;
+  void UpdateImpl() override;
+
+ protected:
+  // PageActionIconView:
+  const gfx::VectorIcon& GetVectorIcon() const override;
+  void OnExecuting(PageActionIconView::ExecuteSource execute_source) override;
+
+ private:
+  // PrefService* pref_service_;
 };
 
 #endif  // BRAVE_BROWSER_UI_VIEWS_READER_MODE_BRAVE_READER_MODE_ICON_VIEW_H_

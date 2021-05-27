@@ -6,6 +6,7 @@
 #include "brave/browser/ui/browser_commands.h"
 
 #include "base/files/file_path.h"
+#include "brave/browser/ui/reader_mode/brave_reader_mode_bubble_controller.h"
 #include "brave/components/brave_wallet/common/buildflags/buildflags.h"
 #include "brave/components/speedreader/buildflags.h"
 #include "brave/components/tor/buildflags/buildflags.h"
@@ -91,6 +92,8 @@ void ToggleSpeedreader(Browser* browser) {
     WebContents* contents = browser->tab_strip_model()->GetActiveWebContents();
     if (contents) {
       contents->GetController().Reload(content::ReloadType::NORMAL, false);
+      auto* controller = BraveReaderModeBubbleController::Get(contents);
+      controller->ShowBubble();
     }
   }
 #endif  // BUILDFLAG(ENABLE_SPEEDREADER)

@@ -126,6 +126,8 @@ source_set("ui") {
 
   if (toolkit_views) {
     sources += [
+      "reader_mode/brave_reader_mode_bubble_controller.cc",
+      "reader_mode/brave_reader_mode_bubble_controller.h",
       "views/bookmarks/bookmark_bar_instructions_view.cc",
       "views/bookmarks/bookmark_bar_instructions_view.h",
       "views/brave_default_browser_dialog_view.cc",
@@ -140,6 +142,8 @@ source_set("ui") {
       "views/frame/brave_opaque_browser_frame_view.h",
       "views/frame/brave_window_frame_graphic.cc",
       "views/frame/brave_window_frame_graphic.h",
+      "views/reader_mode/brave_reader_mode_bubble.cc",
+      "views/reader_mode/brave_reader_mode_bubble.h",
       "views/reader_mode/brave_reader_mode_icon_view.cc",
       "views/reader_mode/brave_reader_mode_icon_view.h",
       "views/rounded_separator.cc",
