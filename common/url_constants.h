@@ -3,7 +3,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-
 #ifndef BRAVE_COMMON_URL_CONSTANTS_H_
 #define BRAVE_COMMON_URL_CONSTANTS_H_
 
@@ -21,6 +20,7 @@ extern const char kP3ASettingsLink[];
 extern const char kImportDataHelpURL[];
 extern const char kCryptoWalletsLearnMoreURL[];
 extern const char kPermissionPromptLearnMoreUrl[];
+extern const char kSpeedreaderLearnMoreUrl[];
 
 // This is introduced to replace |kDownloadChromeUrl| in
 // outdated_upgrade_bubble_view.cc"

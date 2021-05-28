@@ -12,6 +12,10 @@
 #include "ui/views/controls/button/md_text_button.h"
 #include "ui/views/metadata/metadata_header_macros.h"
 
+namespace content {
+class WebContents;
+}  // namespace content
+
 namespace ui {
 class Event;
 }  // namespace ui
@@ -55,12 +59,13 @@ class BraveReaderModeBubble : public LocationBarBubbleDelegateView {
   void UpdateColors();
 
   void OnButtonPressed(const ui::Event& event);
+  void LearnMoreClicked(const ui::Event& event);
+
+  content::WebContents* web_contents_;
   BraveReaderModeBubbleController* controller_;  // weak.
 
   // fixme: unique_ptr?
   views::Label* heading_label_ = nullptr;
-  views::Label* subtext_label_ = nullptr;
-  views::Link* learn_more_link_ = nullptr;
   ReaderButton* button_ = nullptr;
 };
 
