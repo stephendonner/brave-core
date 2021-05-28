@@ -9,12 +9,21 @@
 #include "brave/browser/ui/reader_mode/brave_reader_mode_bubble_controller.h"
 #include "chrome/browser/ui/views/location_bar/location_bar_bubble_delegate_view.h"
 #include "content/public/browser/web_contents.h"
+#include "ui/views/controls/button/md_text_button.h"
 #include "ui/views/metadata/metadata_header_macros.h"
+
+namespace ui {
+class Event;
+}  // namespace ui
 
 namespace views {
 class View;
 class Label;
+class Link;
+class MdTextButton;
 }  // namespace views
+
+class ReaderButton;
 
 class BraveReaderModeBubbleController;
 
@@ -39,9 +48,20 @@ class BraveReaderModeBubble : public LocationBarBubbleDelegateView {
   // views::BubbleDialogDelegateView:
   void Init() override;
 
+  // views::View
+  gfx::Size CalculatePreferredSize() const override;
+  void OnThemeChanged() override;
+
+  void UpdateColors();
+
+  void OnButtonPressed(const ui::Event& event);
   BraveReaderModeBubbleController* controller_;  // weak.
 
-  views::Label* label_ = nullptr;
+  // fixme: unique_ptr?
+  views::Label* heading_label_ = nullptr;
+  views::Label* subtext_label_ = nullptr;
+  views::Link* learn_more_link_ = nullptr;
+  ReaderButton* button_ = nullptr;
 };
 
 #endif  // BRAVE_BROWSER_UI_VIEWS_READER_MODE_BRAVE_READER_MODE_BUBBLE_H_
