@@ -144,6 +144,8 @@ source_set("ui") {
       "views/frame/brave_window_frame_graphic.h",
       "views/rounded_separator.cc",
       "views/rounded_separator.h",
+      "views/speedreader/speedreader_bubble_global.cc",
+      "views/speedreader/speedreader_bubble_global.h",
       "views/speedreader/speedreader_bubble_single_page.cc",
       "views/speedreader/speedreader_bubble_single_page.h",
       "views/speedreader/speedreader_icon_view.cc",

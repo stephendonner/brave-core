@@ -10,6 +10,7 @@
 #include "brave/browser/sparkle_buildflags.h"
 #include "brave/browser/translate/buildflags/buildflags.h"
 #include "brave/browser/ui/speedreader/speedreader_bubble_controller.h"
+#include "brave/browser/ui/views/speedreader/speedreader_bubble_global.h"
 #include "brave/browser/ui/views/speedreader/speedreader_bubble_single_page.h"
 #include "brave/browser/ui/views/toolbar/bookmark_button.h"
 #include "brave/browser/ui/views/toolbar/brave_toolbar_view.h"
@@ -48,9 +49,7 @@ class BraveBrowserView::TabCyclingEventHandler : public ui::EventObserver,
     Start();
   }
 
-  ~TabCyclingEventHandler() override {
-    Stop();
-  }
+  ~TabCyclingEventHandler() override { Stop(); }
 
   TabCyclingEventHandler(const TabCyclingEventHandler&) = delete;
   TabCyclingEventHandler& operator=(const TabCyclingEventHandler&) = delete;
@@ -77,17 +76,14 @@ class BraveBrowserView::TabCyclingEventHandler : public ui::EventObserver,
   }
 
   // Handle Browser widget closing while tab Cycling is in-progress.
-  void OnWidgetClosing(views::Widget* widget) override {
-    Stop();
-  }
+  void OnWidgetClosing(views::Widget* widget) override { Stop(); }
 
   void Start() {
     // Add the event handler
     auto* widget = browser_view_->GetWidget();
     if (widget->GetNativeWindow()) {
       monitor_ = views::EventMonitor::CreateWindowMonitor(
-          this,
-          widget->GetNativeWindow(),
+          this, widget->GetNativeWindow(),
           {ui::ET_MOUSE_PRESSED, ui::ET_KEY_RELEASED});
     }
 
@@ -199,31 +195,25 @@ ShowTranslateBubbleResult BraveBrowserView::ShowTranslateBubble(
     translate::TranslateErrors::Type error_type,
     bool is_user_gesture) {
 #if BUILDFLAG(ENABLE_BRAVE_TRANSLATE_GO)
-  return BrowserView::ShowTranslateBubble(web_contents,
-                                          step,
-                                          source_language,
-                                          target_language,
-                                          error_type,
+  return BrowserView::ShowTranslateBubble(web_contents, step, source_language,
+                                          target_language, error_type,
                                           is_user_gesture);
 #elif BUILDFLAG(ENABLE_BRAVE_TRANSLATE_EXTENSION)
   if (!extensions::ExtensionRegistry::Get(GetProfile())
-      ->GetInstalledExtension(google_translate_extension_id)) {
-    return BrowserView::ShowTranslateBubble(web_contents,
-                                            step,
-                                            source_language,
-                                            target_language,
-                                            error_type,
+           ->GetInstalledExtension(google_translate_extension_id)) {
+    return BrowserView::ShowTranslateBubble(web_contents, step, source_language,
+                                            target_language, error_type,
                                             is_user_gesture);
   }
 #endif
   return ShowTranslateBubbleResult::BROWSER_WINDOW_NOT_VALID;
 }
 
-SpeedreaderBubbleSinglePage* BraveBrowserView::ShowSpeedreaderBubble(
+SpeedreaderBubbleGlobal* BraveBrowserView::ShowSpeedreaderBubble(
     content::WebContents* contents,
     SpeedreaderBubbleController* controller) {
-  SpeedreaderBubbleSinglePage* bubble = new SpeedreaderBubbleSinglePage(
-      GetLocationBarView(), contents, controller);
+  SpeedreaderBubbleGlobal* bubble =
+      new SpeedreaderBubbleGlobal(GetLocationBarView(), contents, controller);
   // fixme: highlight the button
   views::BubbleDialogDelegateView::CreateBubble(bubble);
   bubble->Show();
@@ -269,6 +259,6 @@ void BraveBrowserView::StartTabCycling() {
 
 void BraveBrowserView::StopTabCycling() {
   tab_cycling_event_handler_.reset();
-  static_cast<BraveTabStripModel*>(browser()->tab_strip_model())->
-      StopMRUCycling();
+  static_cast<BraveTabStripModel*>(browser()->tab_strip_model())
+      ->StopMRUCycling();
 }

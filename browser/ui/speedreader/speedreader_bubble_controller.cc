@@ -27,7 +27,8 @@ SpeedreaderBubbleController::SpeedreaderBubbleController(
     content::WebContents* web_contents)
     : web_contents_(web_contents) {}
 
-SpeedreaderBubbleSinglePage*
+//fixme SpeedreaderBubbleSinglePage*
+SpeedreaderBubbleGlobal*
 SpeedreaderBubbleController::speedreader_bubble_view() const {
   return speedreader_bubble_;
 }

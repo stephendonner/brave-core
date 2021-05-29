@@ -6,13 +6,15 @@
 #ifndef BRAVE_BROWSER_UI_SPEEDREADER_SPEEDREADER_BUBBLE_CONTROLLER_H_
 #define BRAVE_BROWSER_UI_SPEEDREADER_SPEEDREADER_BUBBLE_CONTROLLER_H_
 
+#include "brave/browser/ui/views/speedreader/speedreader_bubble_global.h"
 #include "content/public/browser/web_contents_user_data.h"
 
 namespace content {
 class WebContents;
 }  // namespace content
 
-class SpeedreaderBubbleSinglePage;
+// fixme class SpeedreaderBubbleSinglePage;
+class SpeedreaderBubbleGlobal;
 
 class SpeedreaderBubbleController
     : public content::WebContentsUserData<SpeedreaderBubbleController> {
@@ -30,7 +32,7 @@ class SpeedreaderBubbleController
   void HideBubble();
 
   // returns nullptr if no bubble corruntly shown
-  SpeedreaderBubbleSinglePage* speedreader_bubble_view() const;
+  SpeedreaderBubbleGlobal* speedreader_bubble_view() const;
 
   // Handler for when the bubble is dismissed.
   void OnBubbleClosed();
@@ -42,7 +44,7 @@ class SpeedreaderBubbleController
  private:
   SpeedreaderBubbleController();
 
-  SpeedreaderBubbleSinglePage* speedreader_bubble_ = nullptr;
+  SpeedreaderBubbleGlobal* speedreader_bubble_ = nullptr;
   friend class content::WebContentsUserData<SpeedreaderBubbleController>;
 
   content::WebContents* web_contents_;

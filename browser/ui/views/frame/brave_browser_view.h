@@ -11,6 +11,7 @@
 
 #include "brave/browser/ui/speedreader/speedreader_bubble_controller.h"
 #include "brave/browser/ui/tabs/brave_tab_strip_model.h"
+#include "brave/browser/ui/views/speedreader/speedreader_bubble_global.h"
 #include "brave/browser/ui/views/speedreader/speedreader_bubble_single_page.h"
 #include "brave/components/sidebar/buildflags/buildflags.h"
 #include "chrome/browser/ui/views/frame/browser_view.h"
@@ -21,7 +22,8 @@ class ContentsLayoutManager;
 class SidebarContainerView;
 #endif
 
-class SpeedreaderBubbleSinglePage;
+// fixme class SpeedreaderBubbleSinglePage;
+class SpeedreaderButtonGlobal;
 class SpeedreaderBubbleController;
 class WalletButton;
 
@@ -39,7 +41,7 @@ class BraveBrowserView : public BrowserView {
       const std::string& target_language,
       translate::TranslateErrors::Type error_type,
       bool is_user_gesture) override;
-  SpeedreaderBubbleSinglePage* ShowSpeedreaderBubble(
+  SpeedreaderBubbleGlobal* ShowSpeedreaderBubble(
       content::WebContents* contents,
       SpeedreaderBubbleController* controller) override;
   void CreateWalletBubble();
