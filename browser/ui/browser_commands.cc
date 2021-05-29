@@ -6,7 +6,6 @@
 #include "brave/browser/ui/browser_commands.h"
 
 #include "base/files/file_path.h"
-#include "brave/browser/ui/reader_mode/brave_reader_mode_bubble_controller.h"
 #include "brave/components/brave_wallet/common/buildflags/buildflags.h"
 #include "brave/components/speedreader/buildflags.h"
 #include "brave/components/tor/buildflags/buildflags.h"
@@ -29,6 +28,7 @@
 
 #if BUILDFLAG(ENABLE_SPEEDREADER)
 #include "brave/browser/speedreader/speedreader_service_factory.h"
+#include "brave/browser/ui/speedreader/speedreader_bubble_controller.h"
 #include "brave/components/speedreader/speedreader_service.h"
 #endif
 
@@ -87,12 +87,26 @@ void ToggleSpeedreader(Browser* browser) {
       speedreader::SpeedreaderServiceFactory::GetForProfile(browser->profile());
   if (service) {
     // This will trigger a button update via a pref change subscribition.
-    service->ToggleSpeedreader();
+    // service->ToggleSpeedreader();
 
     WebContents* contents = browser->tab_strip_model()->GetActiveWebContents();
     if (contents) {
       contents->GetController().Reload(content::ReloadType::NORMAL, false);
-      auto* controller = BraveReaderModeBubbleController::Get(contents);
+      auto* controller = SpeedreaderBubbleController::Get(contents);
+      controller->ShowBubble();
+    }
+  }
+#endif  // BUILDFLAG(ENABLE_SPEEDREADER)
+}
+
+void ShowSpeedreaderBubble(Browser* browser) {
+#if BUILDFLAG(ENABLE_SPEEDREADER)
+  speedreader::SpeedreaderService* service =
+      speedreader::SpeedreaderServiceFactory::GetForProfile(browser->profile());
+  if (service) {
+    WebContents* contents = browser->tab_strip_model()->GetActiveWebContents();
+    if (contents) {
+      auto* controller = SpeedreaderBubbleController::Get(contents);
       controller->ShowBubble();
     }
   }

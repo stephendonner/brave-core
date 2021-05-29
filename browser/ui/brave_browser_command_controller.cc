@@ -150,6 +150,7 @@ void BraveBrowserCommandController::InitBraveCommandState() {
   UpdateCommandEnabled(IDC_ADD_NEW_PROFILE, add_new_profile_enabled);
   UpdateCommandEnabled(IDC_OPEN_GUEST_PROFILE, open_guest_profile_enabled);
   UpdateCommandEnabled(IDC_TOGGLE_SPEEDREADER, true);
+  UpdateCommandEnabled(IDC_SHOW_SPEEDREADER_PANEL, true);
 }
 
 void BraveBrowserCommandController::UpdateCommandForBraveRewards() {
@@ -253,6 +254,9 @@ bool BraveBrowserCommandController::ExecuteBraveCommandWithDisposition(
       break;
     case IDC_CLOSE_BRAVE_WALLET_PANEL:
       brave::CloseWalletBubble(browser_);
+      break;
+    case IDC_SHOW_SPEEDREADER_PANEL:
+      brave::ShowSpeedreaderBubble(browser_);
       break;
     default:
       LOG(WARNING) << "Received Unimplemented Command: " << id;

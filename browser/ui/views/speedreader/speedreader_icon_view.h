@@ -3,25 +3,24 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this file,
 // you can obtain one at http://mozilla.org/MPL/2.0/.
 
-#ifndef BRAVE_BROWSER_UI_VIEWS_READER_MODE_BRAVE_READER_MODE_ICON_VIEW_H_
-#define BRAVE_BROWSER_UI_VIEWS_READER_MODE_BRAVE_READER_MODE_ICON_VIEW_H_
+#ifndef BRAVE_BROWSER_UI_VIEWS_SPEEDREADER_SPEEDREADER_ICON_VIEW_H_
+#define BRAVE_BROWSER_UI_VIEWS_SPEEDREADER_SPEEDREADER_ICON_VIEW_H_
 
 #include "chrome/browser/ui/views/page_action/page_action_icon_view.h"
 #include "ui/views/metadata/metadata_header_macros.h"
 
 class PrefService;
 
-class BraveReaderModeIconView : public PageActionIconView {
+class SpeedreaderIconView : public PageActionIconView {
  public:
-  METADATA_HEADER(BraveReaderModeIconView);
-  BraveReaderModeIconView(
-      CommandUpdater* command_updater,
-      IconLabelBubbleView::Delegate* icon_label_bubble_delegate,
-      PageActionIconView::Delegate* page_action_icon_delegate,
-      PrefService* pref_service);
-  BraveReaderModeIconView(const BraveReaderModeIconView&) = delete;
-  BraveReaderModeIconView& operator=(const BraveReaderModeIconView&) = delete;
-  ~BraveReaderModeIconView() override;
+  METADATA_HEADER(SpeedreaderIconView);
+  SpeedreaderIconView(CommandUpdater* command_updater,
+                      IconLabelBubbleView::Delegate* icon_label_bubble_delegate,
+                      PageActionIconView::Delegate* page_action_icon_delegate,
+                      PrefService* pref_service);
+  SpeedreaderIconView(const SpeedreaderIconView&) = delete;
+  SpeedreaderIconView& operator=(const SpeedreaderIconView&) = delete;
+  ~SpeedreaderIconView() override;
 
   // PageActionIconView:
   views::BubbleDialogDelegate* GetBubble() const override;
@@ -37,4 +36,4 @@ class BraveReaderModeIconView : public PageActionIconView {
   // PrefService* pref_service_;
 };
 
-#endif  // BRAVE_BROWSER_UI_VIEWS_READER_MODE_BRAVE_READER_MODE_ICON_VIEW_H_
+#endif  // BRAVE_BROWSER_UI_VIEWS_SPEEDREADER_SPEEDREADER_ICON_VIEW_H_

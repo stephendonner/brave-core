@@ -1,13 +1,19 @@
-#include "brave/browser/ui/views/reader_mode/brave_reader_mode_bubble.h"
+/* Copyright (c) 2021 The Brave Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#include "brave/browser/ui/views/speedreader/speedreader_bubble_single_page.h"
 
 #include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "base/bind.h"
 #include "base/strings/utf_string_conversions.h"
 #include "brave/browser/themes/theme_properties.h"
-#include "brave/browser/ui/reader_mode/brave_reader_mode_bubble_controller.h"
+#include "brave/browser/ui/speedreader/speedreader_bubble_controller.h"
 #include "brave/common/url_constants.h"
 #include "brave/grit/brave_generated_resources.h"
 #include "chrome/browser/ui/views/location_bar/location_bar_bubble_delegate_view.h"
@@ -61,22 +67,22 @@ class ReaderButton : public views::MdTextButton {
   ~ReaderButton() override = default;
 };
 
-BraveReaderModeBubble::BraveReaderModeBubble(
+SpeedreaderBubbleSinglePage::SpeedreaderBubbleSinglePage(
     views::View* anchor_view,
     content::WebContents* web_contents,
-    BraveReaderModeBubbleController* controller)
+    SpeedreaderBubbleController* controller)
     : LocationBarBubbleDelegateView(anchor_view, nullptr),
       web_contents_(web_contents),
       controller_(controller) {
   SetButtons(ui::DialogButton::DIALOG_BUTTON_NONE);
 }
 
-void BraveReaderModeBubble::Show() {
+void SpeedreaderBubbleSinglePage::Show() {
   LOG(ERROR) << "calling show on bubble!";
   ShowForReason(USER_GESTURE);
 }
 
-void BraveReaderModeBubble::Hide() {
+void SpeedreaderBubbleSinglePage::Hide() {
   LOG(ERROR) << "calling hide on bubble!";
   if (controller_) {
     controller_->OnBubbleClosed();
@@ -85,28 +91,28 @@ void BraveReaderModeBubble::Hide() {
   CloseBubble();
 }
 
-gfx::Size BraveReaderModeBubble::CalculatePreferredSize() const {
+gfx::Size SpeedreaderBubbleSinglePage::CalculatePreferredSize() const {
   return gfx::Size(
       264, LocationBarBubbleDelegateView::CalculatePreferredSize().height());
 }
 
-void BraveReaderModeBubble::OnThemeChanged() {
+void SpeedreaderBubbleSinglePage::OnThemeChanged() {
   LocationBarBubbleDelegateView::OnThemeChanged();
   UpdateColors();
 }
 
-bool BraveReaderModeBubble::ShouldShowCloseButton() const {
+bool SpeedreaderBubbleSinglePage::ShouldShowCloseButton() const {
   return true;
 }
 
-void BraveReaderModeBubble::WindowClosing() {
+void SpeedreaderBubbleSinglePage::WindowClosing() {
   if (controller_) {
     controller_->OnBubbleClosed();
     controller_ = nullptr;
   }
 }
 
-void BraveReaderModeBubble::Init() {
+void SpeedreaderBubbleSinglePage::Init() {
   // fixme:
   //   - localize entire function
   //   - unique_ptr everything
@@ -150,8 +156,9 @@ void BraveReaderModeBubble::Init() {
   explanation_label->AddStyleRange(gfx::Range(0, explanation_length),
                                    explanation_style_text);
   auto explanation_style_link =
-      views::StyledLabel::RangeStyleInfo::CreateForLink(base::BindRepeating(
-          &BraveReaderModeBubble::LearnMoreClicked, base::Unretained(this)));
+      views::StyledLabel::RangeStyleInfo::CreateForLink(
+          base::BindRepeating(&SpeedreaderBubbleSinglePage::LearnMoreClicked,
+                              base::Unretained(this)));
   explanation_label->AddStyleRange(
       gfx::Range(explanation_length, explanation_text.length()),
       explanation_style_link);
@@ -162,12 +169,12 @@ void BraveReaderModeBubble::Init() {
   // Button
   layout->StartRow(0, 0);
   button_ = layout->AddView(std::make_unique<ReaderButton>(
-      base::BindRepeating(&BraveReaderModeBubble::OnButtonPressed,
+      base::BindRepeating(&SpeedreaderBubbleSinglePage::OnButtonPressed,
                           base::Unretained(this)),
       base::ASCIIToUTF16("Turn on Speedreader")));
 }
 
-void BraveReaderModeBubble::UpdateColors() {
+void SpeedreaderBubbleSinglePage::UpdateColors() {
   const ui::ThemeProvider* theme_provider = GetThemeProvider();
   if (!theme_provider)
     return;
@@ -187,11 +194,11 @@ void BraveReaderModeBubble::UpdateColors() {
   // button_->SetEnabledColor(brave_reader_default_color);
 }
 
-void BraveReaderModeBubble::OnButtonPressed(const ui::Event& event) {
+void SpeedreaderBubbleSinglePage::OnButtonPressed(const ui::Event& event) {
   LOG(ERROR) << "button pressed";
 }
 
-void BraveReaderModeBubble::LearnMoreClicked(const ui::Event& event) {
+void SpeedreaderBubbleSinglePage::LearnMoreClicked(const ui::Event& event) {
   LOG(ERROR) << "button clicked";
   web_contents_->OpenURL(content::OpenURLParams(
       GURL(kSpeedreaderLearnMoreUrl), content::Referrer(),
@@ -199,5 +206,5 @@ void BraveReaderModeBubble::LearnMoreClicked(const ui::Event& event) {
       false));
 }
 
-BEGIN_METADATA(BraveReaderModeBubble, LocationBarBubbleDelegateView)
+BEGIN_METADATA(SpeedreaderBubbleSinglePage, LocationBarBubbleDelegateView)
 END_METADATA

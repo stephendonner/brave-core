@@ -6,6 +6,8 @@
 #ifndef BRAVE_BROWSER_UI_BRAVE_BROWSER_WINDOW_H_
 #define BRAVE_BROWSER_UI_BRAVE_BROWSER_WINDOW_H_
 
+#include "brave/browser/ui/speedreader/speedreader_bubble_controller.h"
+#include "brave/browser/ui/views/speedreader/speedreader_bubble_single_page.h"
 #include "brave/components/sidebar/buildflags/buildflags.h"
 #include "chrome/browser/ui/browser_window.h"
 
@@ -13,8 +15,8 @@ namespace sidebar {
 class Sidebar;
 }  // namespace sidebar
 
-class BraveReaderModeBubble;
-class BraveReaderModeBubbleController;
+class SpeedreaderBubbleSinglePage;
+class SpeedreaderBubbleController;
 
 class BraveBrowserWindow : public BrowserWindow {
  public:
@@ -22,9 +24,9 @@ class BraveBrowserWindow : public BrowserWindow {
 
   virtual void StartTabCycling() = 0;
 
-  virtual BraveReaderModeBubble* ShowReaderModeBubble(
+  virtual SpeedreaderBubbleSinglePage* ShowSpeedreaderBubble(
       content::WebContents* contents,
-      BraveReaderModeBubbleController* controller) = 0;
+      SpeedreaderBubbleController* controller) = 0;
 
 #if BUILDFLAG(ENABLE_SIDEBAR)
   virtual sidebar::Sidebar* InitSidebar() = 0;

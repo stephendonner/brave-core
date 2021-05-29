@@ -17,8 +17,8 @@ void OpenGuestProfile();
 void ToggleSpeedreader(Browser* browser);
 void ShowWalletBubble(Browser* browser);
 void CloseWalletBubble(Browser* browser);
+void ShowSpeedreaderBubble(Browser* browser);
 
 }  // namespace brave
-
 
 #endif  // BRAVE_BROWSER_UI_BROWSER_COMMANDS_H_
