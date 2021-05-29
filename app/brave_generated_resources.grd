@@ -1145,6 +1145,13 @@ By installing this extension, you are agreeing to the Google Widevine Terms of U
         </message>
       </if>
 
+      <!-- Speedreader -->
+      <if expr="enable_speedreader">
+        <message name="IDS_SPEEDREADER_DISABLE_THIS_SITE" desc="Label to enable or disable speedreader per site">
+          Turn on/off reader mode just for this website. To turn off Speedreader for your entire browser profile, visit
+        </message>
+      </if>
+
       <!-- P3A -->
       <message name="IDS_BRAVE_CONFIRM_P3A_INFO_BAR" desc="Text that shows on the info bar where user acknowledges the P3A message">
         Brave uses completely private product analytics to estimate the overall usage of certain features

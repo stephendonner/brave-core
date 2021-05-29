@@ -16,11 +16,13 @@
 #include "brave/browser/ui/speedreader/speedreader_bubble_controller.h"
 #include "brave/common/url_constants.h"
 #include "brave/grit/brave_generated_resources.h"
+#include "chrome/browser/ui/views/chrome_layout_provider.h"
 #include "chrome/browser/ui/views/location_bar/location_bar_bubble_delegate_view.h"
 #include "chrome/grit/generated_resources.h"
 #include "components/strings/grit/components_strings.h"
 #include "content/public/browser/page_navigator.h"
 #include "content/public/browser/web_contents.h"
+#include "content/public/browser/web_contents_user_data.h"
 #include "content/public/browser/web_ui_controller.h"
 #include "content/public/common/referrer.h"
 #include "include/core/SkColor.h"
@@ -37,12 +39,15 @@
 #include "ui/views/controls/styled_label.h"
 #include "ui/views/layout/box_layout.h"
 #include "ui/views/layout/grid_layout.h"
+#include "ui/views/layout/layout_provider.h"
 #include "ui/views/metadata/metadata_impl_macros.h"
 #include "ui/views/view.h"
 
 namespace {
 
-constexpr char kReaderMoreLearnMoreSeparator[] = " ";
+constexpr int kLineHeight = 16;
+
+constexpr char kTextSeparator[] = " ";
 
 const std::vector<std::string> kReaderFontFamilies = {
     "Georgia",
@@ -51,22 +56,32 @@ const std::vector<std::string> kReaderFontFamilies = {
     "serif",
 };
 
+std::unique_ptr<views::StyledLabel> BuildLabelWithEndingLink(
+    const std::u16string& reg_text,
+    const std::u16string& link_text,
+    views::Link::ClickedCallback callback) {
+  auto label = std::make_unique<views::StyledLabel>();
+  std::u16string text = reg_text;
+  text.append(base::ASCIIToUTF16(kTextSeparator));
+  size_t default_format_offset = text.length();
+  text.append(link_text);
+  LOG(ERROR) << "text:" << text;
+  label->SetText(text);
+
+  // Setup styles
+  views::StyledLabel::RangeStyleInfo style_link =
+      views::StyledLabel::RangeStyleInfo::CreateForLink(callback);
+  views::StyledLabel::RangeStyleInfo style_default;
+  style_default.custom_font = gfx::FontList(
+      kReaderFontFamilies, gfx::Font::NORMAL, 12, gfx::Font::Weight::NORMAL);
+
+  // Apply styles
+  label->AddStyleRange(gfx::Range(0, default_format_offset), style_default);
+  label->AddStyleRange(gfx::Range(default_format_offset, text.length()),
+                       style_link);
+  return label;
+}
 }  // anonymous namespace
-
-// Material Design button, overriding the font list in the LabelButton.
-class ReaderButton : public views::MdTextButton {
- public:
-  explicit ReaderButton(PressedCallback callback = PressedCallback(),
-                        const std::u16string& text = std::u16string(),
-                        int button_context = views::style::CONTEXT_BUTTON_MD)
-      : views::MdTextButton(callback, text, button_context) {
-    label()->SetFontList(gfx::FontList(kReaderFontFamilies, gfx::Font::NORMAL,
-                                       13, gfx::Font::Weight::SEMIBOLD));
-  }
-
-  void SetEnabledColor(SkColor color) { label()->SetEnabledColor(color); }
-  ~ReaderButton() override = default;
-};
 
 SpeedreaderBubbleGlobal::SpeedreaderBubbleGlobal(
     views::View* anchor_view,
@@ -94,12 +109,7 @@ void SpeedreaderBubbleGlobal::Hide() {
 
 gfx::Size SpeedreaderBubbleGlobal::CalculatePreferredSize() const {
   return gfx::Size(
-      264, LocationBarBubbleDelegateView::CalculatePreferredSize().height());
-}
-
-void SpeedreaderBubbleGlobal::OnThemeChanged() {
-  LocationBarBubbleDelegateView::OnThemeChanged();
-  UpdateColors();
+      324, LocationBarBubbleDelegateView::CalculatePreferredSize().height());
 }
 
 bool SpeedreaderBubbleGlobal::ShouldShowCloseButton() const {
@@ -118,114 +128,66 @@ void SpeedreaderBubbleGlobal::Init() {
   //   - localize entire function
   //   - unique_ptr everything
   LOG(ERROR) << "calling init on bubble";
-  constexpr int kRowPadding = 10;
-  views::GridLayout* layout =
-      SetLayoutManager(std::make_unique<views::GridLayout>());
-  views::ColumnSet* c0 = layout->AddColumnSet(0);
-  c0->AddColumn(
-      /*h_align=*/views::GridLayout::FILL,
-      /*v_align=*/views::GridLayout::FILL,
-      /*resize_percent=*/1.0,
-      /*size_type=*/views::GridLayout::ColumnSize::kUsePreferred,
-      /*fixed_width=*/0,
-      /*min_width=*/0);
-  views::ColumnSet* c1 = layout->AddColumnSet(1);
-  c1->AddColumn(
-      /*h_align=*/views::GridLayout::LEADING,
-      /*v_align=*/views::GridLayout::FILL,
-      /*resize_percent=*/0.0,
-      /*size_type=*/views::GridLayout::ColumnSize::kFixed,
-      /*fixed_width=*/174,  // fixme: use math to get this
-      /*min_width=*/0);
-  c1->AddColumn(
-      /*h_align=*/views::GridLayout::FILL,
-      /*v_align=*/views::GridLayout::FILL,
-      /*resize_percent=*/1.0,
-      /*size_type=*/views::GridLayout::ColumnSize::kUsePreferred,
-      /*fixed_width=*/0,  // fixme: use math to get th
-      /*min_width=*/0);
+  /*
+  SetLayoutManager(std::make_unique<views::BoxLayout>(
+      views::BoxLayout::Orientation::kVertical, gfx::Insets(),
+      ChromeLayoutProvider::Get()->GetDistanceMetric(
+          views::DISTANCE_RELATED_CONTROL_VERTICAL))); */
 
-  // Heading
-  layout->StartRow(0, 1);
-  heading_label_ = layout->AddView(std::make_unique<views::Label>(
-      base::ASCIIToUTF16("wsj.com in Speedreader")));
-  heading_label_->SetFontList(gfx::FontList(
-      kReaderFontFamilies, gfx::Font::NORMAL, 14, gfx::Font::Weight::SEMIBOLD));
-  heading_label_->SetHorizontalAlignment(gfx::ALIGN_LEFT);
+  SetLayoutManager(std::make_unique<views::BoxLayout>(
+      views::BoxLayout::Orientation::kVertical, gfx::Insets(), 10));
+
+  // Create sublayout for button and site title
+  auto site_toggle_view = std::make_unique<views::View>();
+  views::BoxLayout* site_toggle_layout =
+      site_toggle_view->SetLayoutManager(std::make_unique<views::BoxLayout>());
+
+  // Extract site title from webcontents, bolden it
   // fixme: for boldness we can do a style range on a label
-  auto toggle_button =
+  auto site = base::ASCIIToUTF16(web_contents_->GetLastCommittedURL().host());
+  site.append(base::ASCIIToUTF16(kTextSeparator));
+  site.append(base::ASCIIToUTF16("in Speedreader"));
+  auto site_title_label = std::make_unique<views::Label>(site);
+  site_title_label->SetLineHeight(kLineHeight);
+  site_title_label->SetFontList(gfx::FontList(
+      kReaderFontFamilies, gfx::Font::NORMAL, 14, gfx::Font::Weight::SEMIBOLD));
+  site_title_label->SetHorizontalAlignment(gfx::ALIGN_LEFT);
+  site_title_label->SetMultiLine(true);
+  site_title_label_ =
+      site_toggle_view->AddChildView(std::move(site_title_label));
+  site_toggle_layout->SetFlexForView(
+      site_title_label_,
+      1);  // show the button and force text to wrap
+
+  // float button right
+  site_toggle_layout->set_main_axis_alignment(
+      views::BoxLayout::MainAxisAlignment::kEnd);
+  auto site_toggle_button =
       std::make_unique<views::ToggleButton>(base::BindRepeating(
           &SpeedreaderBubbleGlobal::OnButtonPressed, base::Unretained(this)));
-  toggle_button->SetIsOn(true);
-  layout->AddView(std::move(toggle_button));
+  site_toggle_button_ =
+      site_toggle_view->AddChildView(std::move(site_toggle_button));
 
-  layout->AddPaddingRow(views::GridLayout::kFixedSize, kRowPadding);
+  AddChildView(std::move(site_toggle_view));
 
-  // Explanation text with link
-  layout->StartRow(0, 0);
-  std::u16string explanation_text = base::ASCIIToUTF16(
-      "Articles automatically load in reader mode, saving you time.");
-  explanation_text.append(base::ASCIIToUTF16(kReaderMoreLearnMoreSeparator));
-  auto explanation_length = explanation_text.length();
-
-  explanation_text.append(l10n_util::GetStringUTF16(IDS_SETTINGS_TITLE));
-  auto explanation_label = std::make_unique<views::StyledLabel>();
-  explanation_label->SetText(explanation_text);
-
-  views::StyledLabel::RangeStyleInfo explanation_style_text;
-  explanation_style_text.custom_font = gfx::FontList(
-      kReaderFontFamilies, gfx::Font::NORMAL, 12, gfx::Font::Weight::NORMAL);
-  explanation_label->AddStyleRange(gfx::Range(0, explanation_length),
-                                   explanation_style_text);
-  auto explanation_style_link =
-      views::StyledLabel::RangeStyleInfo::CreateForLink(base::BindRepeating(
-          &SpeedreaderBubbleGlobal::LearnMoreClicked, base::Unretained(this)));
-  explanation_label->AddStyleRange(
-      gfx::Range(explanation_length, explanation_text.length()),
-      explanation_style_link);
-
-  layout->AddView(std::move(explanation_label));
-  // layout->AddPaddingRow(views::GridLayout::kFixedSize, kRowPadding);
-
-  // Button
-  // layout->StartRow(0, 0);
-  /*
-  button_ = layout->AddView(std::make_unique<ReaderButton>(
-      base::BindRepeating(&SpeedreaderBubbleGlobal::OnButtonPressed,
-                          base::Unretained(this)),
-      base::ASCIIToUTF16("Turn on Speedreader"))); */
-}
-
-void SpeedreaderBubbleGlobal::UpdateColors() {
-  const ui::ThemeProvider* theme_provider = GetThemeProvider();
-  if (!theme_provider)
-    return;
-
-  // SkColor brave_reader_default_color = theme_provider->GetColor(
-  //    BraveThemeProperties::COLOR_SIDEBAR_ARROW_NORMAL);
-  // SkColor brave_reader_light_color =
-  //    theme_provider->GetColor(BraveThemeProperties::COLOR_SIDEBAR_BUTTON_BASE);
-
-  // heading
-  // heading_label_->SetEnabledColor(brave_reader_default_color);
-
-  // subtext
-  // subtext_label_->SetEnabledColor(brave_reader_light_color);
-
-  // button
-  // button_->SetEnabledColor(brave_reader_default_color);
+  auto site_toggle_explanation = BuildLabelWithEndingLink(
+      l10n_util::GetStringUTF16(IDS_SPEEDREADER_DISABLE_THIS_SITE),
+      l10n_util::GetStringUTF16(IDS_SETTINGS_TITLE),
+      base::BindRepeating(&SpeedreaderBubbleGlobal::OnLinkClicked,
+                          base::Unretained(this)));
+  AddChildView(std::move(site_toggle_explanation));
 }
 
 void SpeedreaderBubbleGlobal::OnButtonPressed(const ui::Event& event) {
   LOG(ERROR) << "button pressed";
 }
 
-void SpeedreaderBubbleGlobal::LearnMoreClicked(const ui::Event& event) {
-  LOG(ERROR) << "button clicked";
-  web_contents_->OpenURL(content::OpenURLParams(
-      GURL(kSpeedreaderLearnMoreUrl), content::Referrer(),
-      WindowOpenDisposition::NEW_FOREGROUND_TAB, ui::PAGE_TRANSITION_LINK,
-      false));
+void SpeedreaderBubbleGlobal::OnLinkClicked(const ui::Event& event) {
+  LOG(ERROR) << "link clicked";
+  web_contents_->OpenURL(
+      content::OpenURLParams(GURL("chrome://settings"), content::Referrer(),
+                             WindowOpenDisposition::NEW_FOREGROUND_TAB,
+                             ui::PAGE_TRANSITION_LINK, false));
 }
 
 BEGIN_METADATA(SpeedreaderBubbleGlobal, LocationBarBubbleDelegateView)

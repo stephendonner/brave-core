@@ -6,6 +6,8 @@
 #ifndef BRAVE_BROWSER_UI_VIEWS_SPEEDREADER_SPEEDREADER_BUBBLE_GLOBAL_H_
 #define BRAVE_BROWSER_UI_VIEWS_SPEEDREADER_SPEEDREADER_BUBBLE_GLOBAL_H_
 
+#include <memory>
+
 #include "brave/browser/ui/speedreader/speedreader_bubble_controller.h"
 #include "chrome/browser/ui/views/location_bar/location_bar_bubble_delegate_view.h"
 #include "content/public/browser/web_contents.h"
@@ -25,9 +27,8 @@ class View;
 class Label;
 class Link;
 class MdTextButton;
+class ToggleButton;
 }  // namespace views
-
-class ReaderButton;
 
 class SpeedreaderBubbleController;
 
@@ -54,18 +55,16 @@ class SpeedreaderBubbleGlobal : public LocationBarBubbleDelegateView {
 
   // views::View
   gfx::Size CalculatePreferredSize() const override;
-  void OnThemeChanged() override;
-
-  void UpdateColors();
 
   void OnButtonPressed(const ui::Event& event);
-  void LearnMoreClicked(const ui::Event& event);
+  void OnLinkClicked(const ui::Event& event);
 
   content::WebContents* web_contents_;
   SpeedreaderBubbleController* controller_;  // weak.
 
   // fixme: unique_ptr?
-  views::Label* heading_label_ = nullptr;
+  views::Label* site_title_label_ = nullptr;
+  views::ToggleButton* site_toggle_button_ = nullptr;
 };
 
 #endif  // BRAVE_BROWSER_UI_VIEWS_SPEEDREADER_SPEEDREADER_BUBBLE_GLOBAL_H_
