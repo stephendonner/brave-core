@@ -22,8 +22,7 @@ class ContentsLayoutManager;
 class SidebarContainerView;
 #endif
 
-// fixme class SpeedreaderBubbleSinglePage;
-class SpeedreaderButtonGlobal;
+class SpeedreaderBubbleView;
 class SpeedreaderBubbleController;
 class WalletButton;
 
@@ -41,7 +40,7 @@ class BraveBrowserView : public BrowserView {
       const std::string& target_language,
       translate::TranslateErrors::Type error_type,
       bool is_user_gesture) override;
-  SpeedreaderBubbleGlobal* ShowSpeedreaderBubble(
+  SpeedreaderBubbleView* ShowSpeedreaderBubble(
       content::WebContents* contents,
       SpeedreaderBubbleController* controller) override;
   void CreateWalletBubble();

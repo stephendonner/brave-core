@@ -6,9 +6,11 @@
 #include "brave/browser/ui/speedreader/speedreader_bubble_controller.h"
 
 #include "brave/browser/ui/brave_browser_window.h"
+#include "brave/browser/ui/speedreader/speedreader_bubble_view.h"
 #include "chrome/browser/ui/browser.h"
 #include "chrome/browser/ui/browser_finder.h"
 #include "chrome/browser/ui/browser_window.h"
+#include "chrome/browser/ui/views/location_bar/location_bar_bubble_delegate_view.h"
 #include "content/public/browser/web_contents.h"
 #include "content/public/browser/web_contents_user_data.h"
 
@@ -27,10 +29,9 @@ SpeedreaderBubbleController::SpeedreaderBubbleController(
     content::WebContents* web_contents)
     : web_contents_(web_contents) {}
 
-//fixme SpeedreaderBubbleSinglePage*
-SpeedreaderBubbleGlobal*
+LocationBarBubbleDelegateView*
 SpeedreaderBubbleController::speedreader_bubble_view() const {
-  return speedreader_bubble_;
+  return reinterpret_cast<LocationBarBubbleDelegateView*>(speedreader_bubble_);
 }
 
 void SpeedreaderBubbleController::OnBubbleClosed() {
@@ -39,9 +40,6 @@ void SpeedreaderBubbleController::OnBubbleClosed() {
 
 // Displays speedreader information
 void SpeedreaderBubbleController::ShowBubble() {
-  // fixme
-  // Browser* browser = chrome::FindBrowserWithWebContents(web_contents_);
-  // speedreader_bubble_ = browser->window()->
   Browser* browser = chrome::FindBrowserWithWebContents(web_contents_);
   DCHECK(browser);
   speedreader_bubble_ = static_cast<BraveBrowserWindow*>(browser->window())
@@ -50,10 +48,10 @@ void SpeedreaderBubbleController::ShowBubble() {
 
 // Hides speedreader information
 void SpeedreaderBubbleController::HideBubble() {
-  // fixme
-  speedreader_bubble_ = nullptr;
+  if (speedreader_bubble_) {
+    speedreader_bubble_->Hide();
+    speedreader_bubble_ = nullptr;
+  }
 }
-
-// fixme: OnBubbleClosed nullptr
 
 WEB_CONTENTS_USER_DATA_KEY_IMPL(SpeedreaderBubbleController)

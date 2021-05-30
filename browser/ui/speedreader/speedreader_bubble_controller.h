@@ -13,8 +13,9 @@ namespace content {
 class WebContents;
 }  // namespace content
 
-// fixme class SpeedreaderBubbleSinglePage;
-class SpeedreaderBubbleGlobal;
+class LocationBarBubbleDelegateView;
+
+class SpeedreaderBubbleView;
 
 class SpeedreaderBubbleController
     : public content::WebContentsUserData<SpeedreaderBubbleController> {
@@ -32,7 +33,7 @@ class SpeedreaderBubbleController
   void HideBubble();
 
   // returns nullptr if no bubble corruntly shown
-  SpeedreaderBubbleGlobal* speedreader_bubble_view() const;
+  LocationBarBubbleDelegateView* speedreader_bubble_view() const;
 
   // Handler for when the bubble is dismissed.
   void OnBubbleClosed();
@@ -44,7 +45,7 @@ class SpeedreaderBubbleController
  private:
   SpeedreaderBubbleController();
 
-  SpeedreaderBubbleGlobal* speedreader_bubble_ = nullptr;
+  SpeedreaderBubbleView* speedreader_bubble_ = nullptr;
   friend class content::WebContentsUserData<SpeedreaderBubbleController>;
 
   content::WebContents* web_contents_;

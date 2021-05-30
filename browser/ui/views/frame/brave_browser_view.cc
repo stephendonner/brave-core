@@ -10,6 +10,7 @@
 #include "brave/browser/sparkle_buildflags.h"
 #include "brave/browser/translate/buildflags/buildflags.h"
 #include "brave/browser/ui/speedreader/speedreader_bubble_controller.h"
+#include "brave/browser/ui/speedreader/speedreader_bubble_view.h"
 #include "brave/browser/ui/views/speedreader/speedreader_bubble_global.h"
 #include "brave/browser/ui/views/speedreader/speedreader_bubble_single_page.h"
 #include "brave/browser/ui/views/toolbar/bookmark_button.h"
@@ -209,11 +210,11 @@ ShowTranslateBubbleResult BraveBrowserView::ShowTranslateBubble(
   return ShowTranslateBubbleResult::BROWSER_WINDOW_NOT_VALID;
 }
 
-SpeedreaderBubbleGlobal* BraveBrowserView::ShowSpeedreaderBubble(
+SpeedreaderBubbleView* BraveBrowserView::ShowSpeedreaderBubble(
     content::WebContents* contents,
     SpeedreaderBubbleController* controller) {
-  SpeedreaderBubbleGlobal* bubble =
-      new SpeedreaderBubbleGlobal(GetLocationBarView(), contents, controller);
+  auto* bubble =
+      new SpeedreaderBubbleSinglePage(GetLocationBarView(), contents, controller);
   // fixme: highlight the button
   views::BubbleDialogDelegateView::CreateBubble(bubble);
   bubble->Show();

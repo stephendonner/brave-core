@@ -6,7 +6,7 @@
 #ifndef BRAVE_BROWSER_UI_VIEWS_SPEEDREADER_SPEEDREADER_BUBBLE_SINGLE_PAGE_H_
 #define BRAVE_BROWSER_UI_VIEWS_SPEEDREADER_SPEEDREADER_BUBBLE_SINGLE_PAGE_H_
 
-#include "brave/browser/ui/speedreader/speedreader_bubble_controller.h"
+#include "brave/browser/ui/speedreader/speedreader_bubble_view.h"
 #include "chrome/browser/ui/views/location_bar/location_bar_bubble_delegate_view.h"
 #include "content/public/browser/web_contents.h"
 #include "ui/views/controls/button/md_text_button.h"
@@ -31,7 +31,8 @@ class ReaderButton;
 
 class SpeedreaderBubbleController;
 
-class SpeedreaderBubbleSinglePage : public LocationBarBubbleDelegateView {
+class SpeedreaderBubbleSinglePage : public SpeedreaderBubbleView,
+                                    public LocationBarBubbleDelegateView {
  public:
   METADATA_HEADER(SpeedreaderBubbleSinglePage);
   SpeedreaderBubbleSinglePage(views::View* anchor_view,
@@ -40,10 +41,11 @@ class SpeedreaderBubbleSinglePage : public LocationBarBubbleDelegateView {
   SpeedreaderBubbleSinglePage(const SpeedreaderBubbleSinglePage&) = delete;
   SpeedreaderBubbleSinglePage& operator=(const SpeedreaderBubbleSinglePage&) =
       delete;
-  // fixme: destructor
+  ~SpeedreaderBubbleSinglePage() override = default;
 
-  void Show();
-  void Hide();
+  // SpeedreaderBubbleView:
+  void Show() override;
+  void Hide() override;
 
  private:
   // LocationBarBubbleDelegateView:

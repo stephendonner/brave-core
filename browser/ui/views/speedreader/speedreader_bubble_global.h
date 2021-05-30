@@ -8,7 +8,7 @@
 
 #include <memory>
 
-#include "brave/browser/ui/speedreader/speedreader_bubble_controller.h"
+#include "brave/browser/ui/speedreader/speedreader_bubble_view.h"
 #include "chrome/browser/ui/views/location_bar/location_bar_bubble_delegate_view.h"
 #include "content/public/browser/web_contents.h"
 #include "ui/views/controls/button/md_text_button.h"
@@ -32,7 +32,8 @@ class ToggleButton;
 
 class SpeedreaderBubbleController;
 
-class SpeedreaderBubbleGlobal : public LocationBarBubbleDelegateView {
+class SpeedreaderBubbleGlobal : public SpeedreaderBubbleView,
+                                public LocationBarBubbleDelegateView {
  public:
   METADATA_HEADER(SpeedreaderBubbleGlobal);
   SpeedreaderBubbleGlobal(views::View* anchor_view,
@@ -40,10 +41,11 @@ class SpeedreaderBubbleGlobal : public LocationBarBubbleDelegateView {
                           SpeedreaderBubbleController* controller);
   SpeedreaderBubbleGlobal(const SpeedreaderBubbleGlobal&) = delete;
   SpeedreaderBubbleGlobal& operator=(const SpeedreaderBubbleGlobal&) = delete;
-  // fixme: destructor
+  ~SpeedreaderBubbleGlobal() override = default;
 
-  void Show();
-  void Hide();
+  // SpeedreaderBubbleView:
+  void Show() override;
+  void Hide() override;
 
  private:
   // LocationBarBubbleDelegateView:
