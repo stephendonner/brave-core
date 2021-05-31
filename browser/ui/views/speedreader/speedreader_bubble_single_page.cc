@@ -37,6 +37,10 @@ namespace {
 
 constexpr int kBubbleWidth = 264;  // width is 264 pixels
 
+constexpr int kFontHeading = 16;  // heading text font size
+
+constexpr int kFontSizeButton = 13;  // button text font size
+
 }  // anonymous namespace
 
 // Material Design button, overriding the font list in the LabelButton.
@@ -46,7 +50,8 @@ class ReaderButton : public views::MdTextButton {
                         const std::u16string& text = std::u16string(),
                         int button_context = views::style::CONTEXT_BUTTON_MD)
       : views::MdTextButton(callback, text, button_context) {
-    label()->SetFontList(speedreader::GetFont(13, gfx::Font::Weight::SEMIBOLD));
+    label()->SetFontList(
+        speedreader::GetFont(kFontSizeButton, gfx::Font::Weight::SEMIBOLD));
   }
 
   void SetEnabledColor(SkColor color) { label()->SetEnabledColor(color); }
@@ -102,7 +107,7 @@ void SpeedreaderBubbleSinglePage::Init() {
       l10n_util::GetStringUTF16(IDS_SPEEDREADER_ASK_ENABLE));
   heading_label->SetMultiLine(true);
   heading_label->SetFontList(
-      speedreader::GetFont(16, gfx::Font::Weight::SEMIBOLD));
+      speedreader::GetFont(kFontHeading, gfx::Font::Weight::SEMIBOLD));
   heading_label->SetHorizontalAlignment(gfx::ALIGN_LEFT);
   heading_label_ = AddChildView(std::move(heading_label));
 

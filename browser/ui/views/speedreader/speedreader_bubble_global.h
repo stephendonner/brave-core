@@ -63,7 +63,7 @@ class SpeedreaderBubbleGlobal : public SpeedreaderBubbleView,
   content::WebContents* web_contents_;
   SpeedreaderBubbleController* controller_;  // weak.
 
-  views::Label* site_title_label_ = nullptr;               // weak.
+  views::StyledLabel* site_title_label_ = nullptr;         // weak.
   views::ToggleButton* site_toggle_button_ = nullptr;      // weak.
   views::StyledLabel* site_toggle_explanation_ = nullptr;  // weak.
 };

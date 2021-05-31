@@ -12,7 +12,6 @@
 #include "base/bind.h"
 #include "base/notreached.h"
 #include "base/strings/utf_string_conversions.h"
-#include "brave/browser/themes/theme_properties.h"
 #include "brave/browser/ui/speedreader/speedreader_bubble_controller.h"
 #include "brave/browser/ui/views/speedreader/speedreader_bubble_util.h"
 #include "brave/common/url_constants.h"
@@ -29,7 +28,6 @@
 #include "ui/base/l10n/l10n_util.h"
 #include "ui/base/window_open_disposition.h"
 #include "ui/events/event.h"
-#include "ui/gfx/text_constants.h"
 #include "ui/views/controls/button/md_text_button.h"
 #include "ui/views/controls/button/toggle_button.h"
 #include "ui/views/controls/label.h"
@@ -42,6 +40,8 @@
 namespace {
 
 constexpr int kBubbleWidth = 324;  // width is 324 pixels
+
+constexpr int kFontSizeSiteTitle = 14;  // site title font size
 
 }  // anonymous namespace
 
@@ -97,14 +97,21 @@ void SpeedreaderBubbleGlobal::Init() {
   // Extract site title from webcontents, bolden it
   // fixme: for boldness we can do a style range on a label
   auto site = base::ASCIIToUTF16(web_contents_->GetLastCommittedURL().host());
+  auto offset = site.length();
   site.append(base::ASCIIToUTF16(speedreader::kSpeedreaderSeparator));
   site.append(l10n_util::GetStringUTF16(IDS_PAGE_IS_DISTILLED));
-  auto site_title_label = std::make_unique<views::Label>(site);
+  auto site_title_label = std::make_unique<views::StyledLabel>();
+  site_title_label->SetText(site);
   site_title_label->SetLineHeight(speedreader::kLineHeight);
-  site_title_label->SetFontList(
-      speedreader::GetFont(14, gfx::Font::Weight::SEMIBOLD));
   site_title_label->SetHorizontalAlignment(gfx::ALIGN_LEFT);
-  site_title_label->SetMultiLine(true);
+  views::StyledLabel::RangeStyleInfo style_title;
+  style_title.custom_font = speedreader::GetFont(
+      kFontSizeSiteTitle, gfx::Font::Weight::SEMIBOLD);  // make host bold
+  site_title_label->AddStyleRange(gfx::Range(0, offset), style_title);
+  style_title.custom_font =
+      speedreader::GetFont(kFontSizeSiteTitle);  // disable bold
+  site_title_label->AddStyleRange(gfx::Range(offset, site.length()),
+                                  style_title);
   site_title_label_ =
       site_toggle_view->AddChildView(std::move(site_title_label));
   site_toggle_layout->SetFlexForView(

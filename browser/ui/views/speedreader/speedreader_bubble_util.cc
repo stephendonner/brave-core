@@ -1,4 +1,12 @@
+/* Copyright (c) 2021 The Brave Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 #include "brave/browser/ui/views/speedreader/speedreader_bubble_util.h"
+
+#include <string>
+#include <vector>
 
 #include "ui/views/controls/styled_label.h"
 
@@ -21,6 +29,8 @@ const int kBoxLayoutChildSpacing = 10;
 
 const char kSpeedreaderSeparator[] = " ";
 
+constexpr int kFontSizeLabel = 12;
+
 gfx::FontList GetFont(int font_size, gfx::Font::Weight weight) {
   return gfx::FontList(kReaderFontFamilies, gfx::Font::NORMAL, font_size,
                        weight);
@@ -42,7 +52,7 @@ std::unique_ptr<views::StyledLabel> BuildLabelWithEndingLink(
   views::StyledLabel::RangeStyleInfo style_link =
       views::StyledLabel::RangeStyleInfo::CreateForLink(callback);
   views::StyledLabel::RangeStyleInfo style_default;
-  style_default.custom_font = GetFont(12);
+  style_default.custom_font = GetFont(kFontSizeLabel);
 
   // Apply styles
   label->AddStyleRange(gfx::Range(0, default_format_offset), style_default);

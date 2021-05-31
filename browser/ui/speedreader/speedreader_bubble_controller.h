@@ -41,7 +41,6 @@ class SpeedreaderBubbleController
  protected:
   explicit SpeedreaderBubbleController(content::WebContents* web_contents);
 
-  // fixme: OnBubbleClosed
  private:
   SpeedreaderBubbleController();
 
