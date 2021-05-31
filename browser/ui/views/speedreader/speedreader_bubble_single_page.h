@@ -8,8 +8,6 @@
 
 #include "brave/browser/ui/speedreader/speedreader_bubble_view.h"
 #include "chrome/browser/ui/views/location_bar/location_bar_bubble_delegate_view.h"
-#include "content/public/browser/web_contents.h"
-#include "ui/views/controls/button/md_text_button.h"
 #include "ui/views/metadata/metadata_header_macros.h"
 
 namespace content {
@@ -23,14 +21,15 @@ class Event;
 namespace views {
 class View;
 class Label;
-class Link;
-class MdTextButton;
+class StyledLabel;
 }  // namespace views
 
 class ReaderButton;
 
 class SpeedreaderBubbleController;
 
+// SpeedreaderBubbleSinglePage is the bubble shown when the user has enabled
+// reader mode but has not enabled Speedreader globally
 class SpeedreaderBubbleSinglePage : public SpeedreaderBubbleView,
                                     public LocationBarBubbleDelegateView {
  public:
@@ -57,19 +56,16 @@ class SpeedreaderBubbleSinglePage : public SpeedreaderBubbleView,
 
   // views::View
   gfx::Size CalculatePreferredSize() const override;
-  void OnThemeChanged() override;
-
-  void UpdateColors();
 
   void OnButtonPressed(const ui::Event& event);
-  void LearnMoreClicked(const ui::Event& event);
+  void OnLinkClicked(const ui::Event& event);
 
   content::WebContents* web_contents_;
   SpeedreaderBubbleController* controller_;  // weak.
 
-  // fixme: unique_ptr?
-  views::Label* heading_label_ = nullptr;
-  ReaderButton* button_ = nullptr;
+  views::Label* heading_label_ = nullptr;              // weak.
+  views::StyledLabel* global_toggle_label_ = nullptr;  // weak.
+  ReaderButton* enable_speedreader_button_ = nullptr;  // weak.
 };
 
 #endif  // BRAVE_BROWSER_UI_VIEWS_SPEEDREADER_SPEEDREADER_BUBBLE_SINGLE_PAGE_H_

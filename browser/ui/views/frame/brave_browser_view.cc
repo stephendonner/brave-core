@@ -214,7 +214,7 @@ SpeedreaderBubbleView* BraveBrowserView::ShowSpeedreaderBubble(
     content::WebContents* contents,
     SpeedreaderBubbleController* controller) {
   auto* bubble =
-      new SpeedreaderBubbleSinglePage(GetLocationBarView(), contents, controller);
+      new SpeedreaderBubbleGlobal(GetLocationBarView(), contents, controller);
   // fixme: highlight the button
   views::BubbleDialogDelegateView::CreateBubble(bubble);
   bubble->Show();

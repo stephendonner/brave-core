@@ -149,6 +149,8 @@ source_set("ui") {
       "views/speedreader/speedreader_bubble_global.h",
       "views/speedreader/speedreader_bubble_single_page.cc",
       "views/speedreader/speedreader_bubble_single_page.h",
+      "views/speedreader/speedreader_bubble_util.cc",
+      "views/speedreader/speedreader_bubble_util.h",
       "views/speedreader/speedreader_icon_view.cc",
       "views/speedreader/speedreader_icon_view.h",
       "views/tabs/brave_browser_tab_strip_controller.cc",
