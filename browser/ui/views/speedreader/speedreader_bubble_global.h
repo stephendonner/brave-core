@@ -31,8 +31,7 @@ class SpeedreaderBubbleController;
 
 // SpeedreaderBubbleGlobal is the bubble shown when Speedreader is enabled for
 // all pages
-class SpeedreaderBubbleGlobal : public SpeedreaderBubbleView,
-                                public LocationBarBubbleDelegateView {
+class SpeedreaderBubbleGlobal : public SpeedreaderBubbleView {
  public:
   METADATA_HEADER(SpeedreaderBubbleGlobal);
   SpeedreaderBubbleGlobal(views::View* anchor_view,

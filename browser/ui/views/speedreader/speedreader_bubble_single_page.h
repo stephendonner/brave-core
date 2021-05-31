@@ -30,8 +30,7 @@ class SpeedreaderBubbleController;
 
 // SpeedreaderBubbleSinglePage is the bubble shown when the user has enabled
 // reader mode but has not enabled Speedreader globally
-class SpeedreaderBubbleSinglePage : public SpeedreaderBubbleView,
-                                    public LocationBarBubbleDelegateView {
+class SpeedreaderBubbleSinglePage : public SpeedreaderBubbleView {
  public:
   METADATA_HEADER(SpeedreaderBubbleSinglePage);
   SpeedreaderBubbleSinglePage(views::View* anchor_view,

@@ -29,9 +29,9 @@ SpeedreaderBubbleController::SpeedreaderBubbleController(
     content::WebContents* web_contents)
     : web_contents_(web_contents) {}
 
-LocationBarBubbleDelegateView*
-SpeedreaderBubbleController::speedreader_bubble_view() const {
-  return reinterpret_cast<LocationBarBubbleDelegateView*>(speedreader_bubble_);
+SpeedreaderBubbleView* SpeedreaderBubbleController::speedreader_bubble_view()
+    const {
+  return speedreader_bubble_;
 }
 
 void SpeedreaderBubbleController::OnBubbleClosed() {
@@ -39,11 +39,12 @@ void SpeedreaderBubbleController::OnBubbleClosed() {
 }
 
 // Displays speedreader information
-void SpeedreaderBubbleController::ShowBubble() {
+void SpeedreaderBubbleController::ShowBubble(bool is_enabled) {
   Browser* browser = chrome::FindBrowserWithWebContents(web_contents_);
   DCHECK(browser);
-  speedreader_bubble_ = static_cast<BraveBrowserWindow*>(browser->window())
-                            ->ShowSpeedreaderBubble(web_contents_, this);
+  speedreader_bubble_ =
+      static_cast<BraveBrowserWindow*>(browser->window())
+          ->ShowSpeedreaderBubble(web_contents_, this, is_enabled);
 }
 
 // Hides speedreader information

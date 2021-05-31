@@ -18,6 +18,7 @@
 #include "brave/components/brave_wallet/common/buildflags/buildflags.h"
 #include "extensions/buildflags/buildflags.h"
 #include "ui/events/event_observer.h"
+#include "ui/views/bubble/bubble_dialog_delegate_view.h"
 #include "ui/views/event_monitor.h"
 
 #if BUILDFLAG(ENABLE_SIDEBAR)
@@ -212,10 +213,15 @@ ShowTranslateBubbleResult BraveBrowserView::ShowTranslateBubble(
 
 SpeedreaderBubbleView* BraveBrowserView::ShowSpeedreaderBubble(
     content::WebContents* contents,
-    SpeedreaderBubbleController* controller) {
-  auto* bubble =
-      new SpeedreaderBubbleGlobal(GetLocationBarView(), contents, controller);
-  // fixme: highlight the button
+    SpeedreaderBubbleController* controller,
+    bool is_enabled) {
+  SpeedreaderBubbleView* bubble;
+  if (is_enabled)
+    bubble =
+        new SpeedreaderBubbleGlobal(GetLocationBarView(), contents, controller);
+  else
+    bubble = new SpeedreaderBubbleSinglePage(GetLocationBarView(), contents,
+                                             controller);
   views::BubbleDialogDelegateView::CreateBubble(bubble);
   bubble->Show();
 

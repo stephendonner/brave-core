@@ -40,8 +40,7 @@
 
 using content::WebContents;
 
-namespace {
-}  // namespace
+namespace {}  // namespace
 
 namespace brave {
 
@@ -60,10 +59,9 @@ void NewTorConnectionForSite(Browser* browser) {
   Profile* profile = browser->profile();
   DCHECK(profile);
   tor::TorProfileService* service =
-    TorProfileServiceFactory::GetForContext(profile);
+      TorProfileServiceFactory::GetForContext(profile);
   DCHECK(service);
-  WebContents* current_tab =
-    browser->tab_strip_model()->GetActiveWebContents();
+  WebContents* current_tab = browser->tab_strip_model()->GetActiveWebContents();
   if (!current_tab)
     return;
   service->SetNewTorCircuit(current_tab);
@@ -93,7 +91,7 @@ void ToggleSpeedreader(Browser* browser) {
     if (contents) {
       contents->GetController().Reload(content::ReloadType::NORMAL, false);
       auto* controller = SpeedreaderBubbleController::Get(contents);
-      controller->ShowBubble();
+      controller->ShowBubble(false /* is_enabled */);
     }
   }
 #endif  // BUILDFLAG(ENABLE_SPEEDREADER)
@@ -107,7 +105,7 @@ void ShowSpeedreaderBubble(Browser* browser) {
     WebContents* contents = browser->tab_strip_model()->GetActiveWebContents();
     if (contents) {
       auto* controller = SpeedreaderBubbleController::Get(contents);
-      controller->ShowBubble();
+      controller->ShowBubble(false /* is_enabled */);
     }
   }
 #endif  // BUILDFLAG(ENABLE_SPEEDREADER)

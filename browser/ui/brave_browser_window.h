@@ -26,7 +26,8 @@ class BraveBrowserWindow : public BrowserWindow {
 
   virtual SpeedreaderBubbleView* ShowSpeedreaderBubble(
       content::WebContents* contents,
-      SpeedreaderBubbleController* controller) = 0;
+      SpeedreaderBubbleController* controller,
+      bool is_enabled) = 0;
 
 #if BUILDFLAG(ENABLE_SIDEBAR)
   virtual sidebar::Sidebar* InitSidebar() = 0;

@@ -42,7 +42,8 @@ class BraveBrowserView : public BrowserView {
       bool is_user_gesture) override;
   SpeedreaderBubbleView* ShowSpeedreaderBubble(
       content::WebContents* contents,
-      SpeedreaderBubbleController* controller) override;
+      SpeedreaderBubbleController* controller,
+      bool is_enabled) override;
   void CreateWalletBubble();
   void CloseWalletBubble();
   WalletButton* GetWalletButton();

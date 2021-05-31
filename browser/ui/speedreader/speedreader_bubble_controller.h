@@ -13,8 +13,6 @@ namespace content {
 class WebContents;
 }  // namespace content
 
-class LocationBarBubbleDelegateView;
-
 class SpeedreaderBubbleView;
 
 class SpeedreaderBubbleController
@@ -27,13 +25,13 @@ class SpeedreaderBubbleController
   static SpeedreaderBubbleController* Get(content::WebContents* web_contents);
 
   // Displays speedreader information
-  void ShowBubble();
+  void ShowBubble(bool is_enabled);
 
   // Hides speedreader information
   void HideBubble();
 
   // returns nullptr if no bubble corruntly shown
-  LocationBarBubbleDelegateView* speedreader_bubble_view() const;
+  SpeedreaderBubbleView* speedreader_bubble_view() const;
 
   // Handler for when the bubble is dismissed.
   void OnBubbleClosed();
