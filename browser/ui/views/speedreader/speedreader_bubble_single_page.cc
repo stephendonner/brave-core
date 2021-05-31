@@ -43,6 +43,8 @@ constexpr int kFontSizeButton = 13;  // button text font size
 
 }  // anonymous namespace
 
+namespace speedreader {
+
 // Material Design button, overriding the font list in the LabelButton.
 class ReaderButton : public views::MdTextButton {
  public:
@@ -50,8 +52,7 @@ class ReaderButton : public views::MdTextButton {
                         const std::u16string& text = std::u16string(),
                         int button_context = views::style::CONTEXT_BUTTON_MD)
       : views::MdTextButton(callback, text, button_context) {
-    label()->SetFontList(
-        speedreader::GetFont(kFontSizeButton, gfx::Font::Weight::SEMIBOLD));
+    label()->SetFontList(GetFont(kFontSizeButton, gfx::Font::Weight::SEMIBOLD));
   }
 
   void SetEnabledColor(SkColor color) { label()->SetEnabledColor(color); }
@@ -100,25 +101,25 @@ void SpeedreaderBubbleSinglePage::WindowClosing() {
 void SpeedreaderBubbleSinglePage::Init() {
   SetLayoutManager(std::make_unique<views::BoxLayout>(
       views::BoxLayout::Orientation::kVertical, gfx::Insets(),
-      speedreader::kBoxLayoutChildSpacing));
+      kBoxLayoutChildSpacing));
 
   // Heading
   auto heading_label = std::make_unique<views::Label>(
       l10n_util::GetStringUTF16(IDS_SPEEDREADER_ASK_ENABLE));
   heading_label->SetMultiLine(true);
   heading_label->SetFontList(
-      speedreader::GetFont(kFontHeading, gfx::Font::Weight::SEMIBOLD));
+      GetFont(kFontHeading, gfx::Font::Weight::SEMIBOLD));
   heading_label->SetHorizontalAlignment(gfx::ALIGN_LEFT);
   heading_label_ = AddChildView(std::move(heading_label));
 
   // Explanation of Speedreader features
-  auto global_toggle_label = speedreader::BuildLabelWithEndingLink(
+  auto global_toggle_label = BuildLabelWithEndingLink(
       l10n_util::GetStringUTF16(IDS_SPEEDREADER_EXPLANATION),
       l10n_util::GetStringUTF16(IDS_LEARN_MORE),
       base::BindRepeating(&SpeedreaderBubbleSinglePage::OnLinkClicked,
                           base::Unretained(this)));
   global_toggle_label->SetHorizontalAlignment(gfx::ALIGN_LEFT);
-  global_toggle_label->SetLineHeight(speedreader::kLineHeight);
+  global_toggle_label->SetLineHeight(kLineHeight);
   global_toggle_label_ = AddChildView(std::move(global_toggle_label));
 
   // Enable Speedreader button
@@ -145,3 +146,5 @@ void SpeedreaderBubbleSinglePage::OnLinkClicked(const ui::Event& event) {
 
 BEGIN_METADATA(SpeedreaderBubbleSinglePage, LocationBarBubbleDelegateView)
 END_METADATA
+
+}  // namespace speedreader

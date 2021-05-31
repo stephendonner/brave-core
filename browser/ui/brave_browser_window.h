@@ -15,8 +15,10 @@ namespace sidebar {
 class Sidebar;
 }  // namespace sidebar
 
+namespace speedreader {
 class SpeedreaderBubbleController;
 class SpeedreaderBubbleView;
+}  // namespace speedreader
 
 class BraveBrowserWindow : public BrowserWindow {
  public:
@@ -24,9 +26,9 @@ class BraveBrowserWindow : public BrowserWindow {
 
   virtual void StartTabCycling() = 0;
 
-  virtual SpeedreaderBubbleView* ShowSpeedreaderBubble(
+  virtual speedreader::SpeedreaderBubbleView* ShowSpeedreaderBubble(
       content::WebContents* contents,
-      SpeedreaderBubbleController* controller,
+      speedreader::SpeedreaderBubbleController* controller,
       bool is_enabled) = 0;
 
 #if BUILDFLAG(ENABLE_SIDEBAR)

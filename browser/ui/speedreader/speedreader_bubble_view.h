@@ -13,6 +13,8 @@ namespace views {
 class View;
 }  // namespace views
 
+namespace speedreader {
+
 // Interface to display a Speedreader info bubble.
 // This object is responsible for its own lifetime.
 class SpeedreaderBubbleView : public LocationBarBubbleDelegateView {
@@ -28,4 +30,7 @@ class SpeedreaderBubbleView : public LocationBarBubbleDelegateView {
   // Closes the bubble and prevents future calls into the controller
   virtual void Hide() = 0;
 };
+
+}  // namespace speedreader
+
 #endif  // BRAVE_BROWSER_UI_SPEEDREADER_SPEEDREADER_BUBBLE_VIEW_H_

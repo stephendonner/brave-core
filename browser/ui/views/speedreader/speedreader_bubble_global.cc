@@ -45,6 +45,8 @@ constexpr int kFontSizeSiteTitle = 14;  // site title font size
 
 }  // anonymous namespace
 
+namespace speedreader {
+
 SpeedreaderBubbleGlobal::SpeedreaderBubbleGlobal(
     views::View* anchor_view,
     content::WebContents* web_contents,
@@ -87,7 +89,7 @@ void SpeedreaderBubbleGlobal::WindowClosing() {
 void SpeedreaderBubbleGlobal::Init() {
   SetLayoutManager(std::make_unique<views::BoxLayout>(
       views::BoxLayout::Orientation::kVertical, gfx::Insets(),
-      speedreader::kBoxLayoutChildSpacing));
+      kBoxLayoutChildSpacing));
 
   // Create sublayout for button and site title
   auto site_toggle_view = std::make_unique<views::View>();
@@ -98,18 +100,17 @@ void SpeedreaderBubbleGlobal::Init() {
   // fixme: for boldness we can do a style range on a label
   auto site = base::ASCIIToUTF16(web_contents_->GetLastCommittedURL().host());
   auto offset = site.length();
-  site.append(base::ASCIIToUTF16(speedreader::kSpeedreaderSeparator));
+  site.append(base::ASCIIToUTF16(kSpeedreaderSeparator));
   site.append(l10n_util::GetStringUTF16(IDS_PAGE_IS_DISTILLED));
   auto site_title_label = std::make_unique<views::StyledLabel>();
   site_title_label->SetText(site);
-  site_title_label->SetLineHeight(speedreader::kLineHeight);
+  site_title_label->SetLineHeight(kLineHeight);
   site_title_label->SetHorizontalAlignment(gfx::ALIGN_LEFT);
   views::StyledLabel::RangeStyleInfo style_title;
-  style_title.custom_font = speedreader::GetFont(
+  style_title.custom_font = GetFont(
       kFontSizeSiteTitle, gfx::Font::Weight::SEMIBOLD);  // make host bold
   site_title_label->AddStyleRange(gfx::Range(0, offset), style_title);
-  style_title.custom_font =
-      speedreader::GetFont(kFontSizeSiteTitle);  // disable bold
+  style_title.custom_font = GetFont(kFontSizeSiteTitle);  // disable bold
   site_title_label->AddStyleRange(gfx::Range(offset, site.length()),
                                   style_title);
   site_title_label_ =
@@ -129,7 +130,7 @@ void SpeedreaderBubbleGlobal::Init() {
 
   AddChildView(std::move(site_toggle_view));
 
-  auto site_toggle_explanation = speedreader::BuildLabelWithEndingLink(
+  auto site_toggle_explanation = BuildLabelWithEndingLink(
       l10n_util::GetStringUTF16(IDS_SPEEDREADER_DISABLE_THIS_SITE),
       l10n_util::GetStringUTF16(IDS_SETTINGS_TITLE),
       base::BindRepeating(&SpeedreaderBubbleGlobal::OnLinkClicked,
@@ -152,3 +153,5 @@ void SpeedreaderBubbleGlobal::OnLinkClicked(const ui::Event& event) {
 
 BEGIN_METADATA(SpeedreaderBubbleGlobal, LocationBarBubbleDelegateView)
 END_METADATA
+
+}  // namespace speedreader

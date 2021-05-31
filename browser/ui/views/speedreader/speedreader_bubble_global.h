@@ -27,6 +27,8 @@ class ToggleButton;
 class StyledLabel;
 }  // namespace views
 
+namespace speedreader {
+
 class SpeedreaderBubbleController;
 
 // SpeedreaderBubbleGlobal is the bubble shown when Speedreader is enabled for
@@ -66,5 +68,7 @@ class SpeedreaderBubbleGlobal : public SpeedreaderBubbleView {
   views::ToggleButton* site_toggle_button_ = nullptr;      // weak.
   views::StyledLabel* site_toggle_explanation_ = nullptr;  // weak.
 };
+
+}  // namespace speedreader
 
 #endif  // BRAVE_BROWSER_UI_VIEWS_SPEEDREADER_SPEEDREADER_BUBBLE_GLOBAL_H_

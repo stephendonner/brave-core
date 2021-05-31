@@ -24,8 +24,9 @@ class Label;
 class StyledLabel;
 }  // namespace views
 
-class ReaderButton;
+namespace speedreader {
 
+class ReaderButton;
 class SpeedreaderBubbleController;
 
 // SpeedreaderBubbleSinglePage is the bubble shown when the user has enabled
@@ -66,5 +67,7 @@ class SpeedreaderBubbleSinglePage : public SpeedreaderBubbleView {
   views::StyledLabel* global_toggle_label_ = nullptr;  // weak.
   ReaderButton* enable_speedreader_button_ = nullptr;  // weak.
 };
+
+}  // namespace speedreader
 
 #endif  // BRAVE_BROWSER_UI_VIEWS_SPEEDREADER_SPEEDREADER_BUBBLE_SINGLE_PAGE_H_

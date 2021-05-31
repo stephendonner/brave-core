@@ -14,6 +14,8 @@
 #include "content/public/browser/web_contents.h"
 #include "content/public/browser/web_contents_user_data.h"
 
+namespace speedreader {
+
 // static
 SpeedreaderBubbleController* SpeedreaderBubbleController::Get(
     content::WebContents* web_contents) {
@@ -56,3 +58,5 @@ void SpeedreaderBubbleController::HideBubble() {
 }
 
 WEB_CONTENTS_USER_DATA_KEY_IMPL(SpeedreaderBubbleController)
+
+}  // namespace speedreader

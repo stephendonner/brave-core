@@ -90,7 +90,8 @@ void ToggleSpeedreader(Browser* browser) {
     WebContents* contents = browser->tab_strip_model()->GetActiveWebContents();
     if (contents) {
       contents->GetController().Reload(content::ReloadType::NORMAL, false);
-      auto* controller = SpeedreaderBubbleController::Get(contents);
+      auto* controller =
+          speedreader::SpeedreaderBubbleController::Get(contents);
       controller->ShowBubble(false /* is_enabled */);
     }
   }
@@ -104,7 +105,8 @@ void ShowSpeedreaderBubble(Browser* browser) {
   if (service) {
     WebContents* contents = browser->tab_strip_model()->GetActiveWebContents();
     if (contents) {
-      auto* controller = SpeedreaderBubbleController::Get(contents);
+      auto* controller =
+          speedreader::SpeedreaderBubbleController::Get(contents);
       controller->ShowBubble(false /* is_enabled */);
     }
   }

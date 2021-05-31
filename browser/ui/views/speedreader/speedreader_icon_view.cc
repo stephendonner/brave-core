@@ -50,7 +50,8 @@ views::BubbleDialogDelegate* SpeedreaderIconView::GetBubble() const {
   if (!web_contents)
     return nullptr;
 
-  auto* bubble_controller = SpeedreaderBubbleController::Get(web_contents);
+  auto* bubble_controller =
+      speedreader::SpeedreaderBubbleController::Get(web_contents);
   if (!bubble_controller)
     return nullptr;
 

@@ -13,6 +13,8 @@ namespace content {
 class WebContents;
 }  // namespace content
 
+namespace speedreader {
+
 class SpeedreaderBubbleView;
 
 class SpeedreaderBubbleController
@@ -48,5 +50,7 @@ class SpeedreaderBubbleController
   content::WebContents* web_contents_;
   WEB_CONTENTS_USER_DATA_KEY_DECL();
 };
+
+}  // namespace speedreader
 
 #endif  // BRAVE_BROWSER_UI_SPEEDREADER_SPEEDREADER_BUBBLE_CONTROLLER_H_
