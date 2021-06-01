@@ -5,9 +5,10 @@
 
 #include "brave/browser/ui/views/speedreader/speedreader_icon_view.h"
 
+#include "base/strings/utf_string_conversions.h"
 #include "brave/app/brave_command_ids.h"
 #include "brave/app/vector_icons/vector_icons.h"
-#include "brave/browser/ui/speedreader/speedreader_bubble_controller.h"
+#include "brave/browser/speedreader/speedreader_tab_helper.h"
 #include "brave/browser/ui/views/speedreader/speedreader_bubble_global.h"
 #include "brave/browser/ui/views/speedreader/speedreader_bubble_single_page.h"
 #include "chrome/app/chrome_command_ids.h"
@@ -32,6 +33,7 @@ SpeedreaderIconView::~SpeedreaderIconView() = default;
 
 void SpeedreaderIconView::UpdateImpl() {
   SetVisible(true);  // fixme: testing
+  SetLabel(base::ASCIIToUTF16("Reader Mode"));
 }
 
 const gfx::VectorIcon& SpeedreaderIconView::GetVectorIcon() const {
@@ -51,13 +53,13 @@ views::BubbleDialogDelegate* SpeedreaderIconView::GetBubble() const {
   if (!web_contents)
     return nullptr;
 
-  auto* bubble_controller =
-      speedreader::SpeedreaderBubbleController::Get(web_contents);
-  if (!bubble_controller)
+  auto* bubble_tab_helper =
+      speedreader::SpeedreaderTabHelper::Get(web_contents);
+  if (!bubble_tab_helper)
     return nullptr;
 
   return reinterpret_cast<LocationBarBubbleDelegateView*>(
-      bubble_controller->speedreader_bubble_view());
+      bubble_tab_helper->speedreader_bubble_view());
 }
 
 BEGIN_METADATA(SpeedreaderIconView, PageActionIconView)

@@ -80,34 +80,34 @@ void OpenGuestProfile() {
 }
 
 void ToggleSpeedreader(Browser* browser) {
+  LOG(ERROR) << "calling toggle";
 #if BUILDFLAG(ENABLE_SPEEDREADER)
   speedreader::SpeedreaderService* service =
       speedreader::SpeedreaderServiceFactory::GetForProfile(browser->profile());
   if (service) {
     // This will trigger a button update via a pref change subscribition.
-    // service->ToggleSpeedreader();
+    service->ToggleSpeedreader();
 
     WebContents* contents = browser->tab_strip_model()->GetActiveWebContents();
     if (contents) {
       contents->GetController().Reload(content::ReloadType::NORMAL, false);
-      auto* controller =
-          speedreader::SpeedreaderBubbleController::Get(contents);
-      controller->ShowBubble(true /* is_enabled */);
+      auto* controller = speedreader::SpeedreaderTabHelper::Get(contents);
+      controller->ShowBubble();
     }
   }
 #endif  // BUILDFLAG(ENABLE_SPEEDREADER)
 }
 
 void ShowSpeedreaderBubble(Browser* browser) {
+  LOG(ERROR) << "showing bubble";
 #if BUILDFLAG(ENABLE_SPEEDREADER)
   speedreader::SpeedreaderService* service =
       speedreader::SpeedreaderServiceFactory::GetForProfile(browser->profile());
   if (service) {
     WebContents* contents = browser->tab_strip_model()->GetActiveWebContents();
     if (contents) {
-      auto* controller =
-          speedreader::SpeedreaderBubbleController::Get(contents);
-      controller->ShowBubble(true /* is_enabled */);
+      auto* tab_helper = speedreader::SpeedreaderTabHelper::Get(contents);
+      tab_helper->ShowBubble();
     }
   }
 #endif  // BUILDFLAG(ENABLE_SPEEDREADER)
