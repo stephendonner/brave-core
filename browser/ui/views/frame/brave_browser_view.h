@@ -9,7 +9,7 @@
 #include <memory>
 #include <string>
 
-#include "brave/browser/ui/speedreader/speedreader_bubble_controller.h"
+#include "brave/browser/speedreader/speedreader_tab_helper.h"
 #include "brave/browser/ui/tabs/brave_tab_strip_model.h"
 #include "brave/browser/ui/views/speedreader/speedreader_bubble_global.h"
 #include "brave/browser/ui/views/speedreader/speedreader_bubble_single_page.h"
@@ -24,7 +24,7 @@ class SidebarContainerView;
 
 namespace speedreader {
 class SpeedreaderBubbleView;
-class SpeedreaderBubbleController;
+class SpeedreaderTabHelper;
 }  // namespace speedreader
 
 class WalletButton;
@@ -45,7 +45,7 @@ class BraveBrowserView : public BrowserView {
       bool is_user_gesture) override;
   speedreader::SpeedreaderBubbleView* ShowSpeedreaderBubble(
       content::WebContents* contents,
-      speedreader::SpeedreaderBubbleController* controller,
+      speedreader::SpeedreaderTabHelper* tab_helper,
       bool is_enabled) override;
   void CreateWalletBubble();
   void CloseWalletBubble();
