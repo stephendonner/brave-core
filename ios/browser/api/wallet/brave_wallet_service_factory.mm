@@ -46,11 +46,6 @@ BraveWalletServiceFactory::BuildServiceInstanceFor(
   return wallet_service;
 }
 
-web::BrowserState* BraveWalletServiceFactory::GetBrowserStateToUse(
-    web::BrowserState* context) const {
-  return ChromeBrowserState::FromBrowserState(context);
-}
-
 bool BraveWalletServiceFactory::ServiceIsNULLWhileTesting() const {
   return true;
 }

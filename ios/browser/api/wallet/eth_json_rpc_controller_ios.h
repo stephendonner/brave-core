@@ -3,8 +3,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef BRAVE_IOS_BROWSER_API_WALLET_ETH_JSON_RPC_CONTROLLER_H_
-#define BRAVE_IOS_BROWSER_API_WALLET_ETH_JSON_RPC_CONTROLLER_H_
+#ifndef BRAVE_IOS_BROWSER_API_WALLET_ETH_JSON_RPC_CONTROLLER_IOS_H_
+#define BRAVE_IOS_BROWSER_API_WALLET_ETH_JSON_RPC_CONTROLLER_IOS_H_
 
 #import <Foundation/Foundation.h>
 
@@ -19,10 +19,8 @@ typedef NS_ENUM(NSInteger, WalletNetwork) {
 };
 
 OBJC_EXPORT
-@interface ETHJSONRPCController : NSObject
-
-@property(class, nonatomic, readonly)
-    ETHJSONRPCController* sharedController NS_SWIFT_NAME(shared);
+NS_SWIFT_NAME(ETHJSONRPCController)
+@interface ETHJSONRPCControllerIOS : NSObject
 
 - (void)
     startRequestWithJSONPayload:(NSString*)payload
@@ -42,4 +40,4 @@ OBJC_EXPORT
 
 @end
 
-#endif  // BRAVE_IOS_BROWSER_API_WALLET_ETH_JSON_RPC_CONTROLLER_H_
+#endif  // BRAVE_IOS_BROWSER_API_WALLET_ETH_JSON_RPC_CONTROLLER_IOS_H_

@@ -3,38 +3,22 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#import "brave/ios/browser/api/wallet/eth_json_rpc_controller.h"
+#import "brave/ios/browser/api/wallet/eth_json_rpc_controller_ios.h"
 
 #if !defined(__has_feature) || !__has_feature(objc_arc)
 #error "This file requires ARC support."
 #endif
 
-#import "brave/ios/browser/api/wallet/brave_wallet_service_factory.h"
-
 #include "base/bind.h"
 #include "base/strings/sys_string_conversions.h"
-#include "brave/components/brave_wallet/browser/brave_wallet_service.h"
 #include "brave/components/brave_wallet/browser/eth_json_rpc_controller.h"
-#include "ios/chrome/browser/application_context.h"
-#include "ios/chrome/browser/browser_state/chrome_browser_state.h"
-#include "ios/chrome/browser/browser_state/chrome_browser_state_manager.h"
 
-@interface ETHJSONRPCController () {
+@interface ETHJSONRPCControllerIOS () {
   brave_wallet::EthJsonRpcController* _controller;  // NOT OWNED
 }
 @end
 
-@implementation ETHJSONRPCController
-
-+ (instancetype)sharedController {
-  // get from BraveWalletService rpc_controller
-  auto* state = GetApplicationContext()
-                    ->GetChromeBrowserStateManager()
-                    ->GetLastUsedBrowserState();
-  auto* controller =
-      BraveWalletServiceFactory::GetForBrowserState(state)->rpc_controller();
-  return [[ETHJSONRPCController alloc] initWithController:controller];
-}
+@implementation ETHJSONRPCControllerIOS
 
 - (instancetype)initWithController:
     (brave_wallet::EthJsonRpcController*)controller {
