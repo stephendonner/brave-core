@@ -8,6 +8,7 @@
 #include "brave/app/brave_command_ids.h"
 #include "brave/app/vector_icons/vector_icons.h"
 #include "brave/browser/ui/speedreader/speedreader_bubble_controller.h"
+#include "brave/browser/ui/views/speedreader/speedreader_bubble_global.h"
 #include "brave/browser/ui/views/speedreader/speedreader_bubble_single_page.h"
 #include "chrome/app/chrome_command_ids.h"
 #include "chrome/grit/generated_resources.h"
@@ -55,7 +56,8 @@ views::BubbleDialogDelegate* SpeedreaderIconView::GetBubble() const {
   if (!bubble_controller)
     return nullptr;
 
-  return bubble_controller->speedreader_bubble_view();
+  return reinterpret_cast<LocationBarBubbleDelegateView*>(
+      bubble_controller->speedreader_bubble_view());
 }
 
 BEGIN_METADATA(SpeedreaderIconView, PageActionIconView)
