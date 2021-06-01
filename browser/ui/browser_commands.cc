@@ -92,7 +92,7 @@ void ToggleSpeedreader(Browser* browser) {
       contents->GetController().Reload(content::ReloadType::NORMAL, false);
       auto* controller =
           speedreader::SpeedreaderBubbleController::Get(contents);
-      controller->ShowBubble(false /* is_enabled */);
+      controller->ShowBubble(true /* is_enabled */);
     }
   }
 #endif  // BUILDFLAG(ENABLE_SPEEDREADER)
@@ -107,7 +107,7 @@ void ShowSpeedreaderBubble(Browser* browser) {
     if (contents) {
       auto* controller =
           speedreader::SpeedreaderBubbleController::Get(contents);
-      controller->ShowBubble(false /* is_enabled */);
+      controller->ShowBubble(true /* is_enabled */);
     }
   }
 #endif  // BUILDFLAG(ENABLE_SPEEDREADER)

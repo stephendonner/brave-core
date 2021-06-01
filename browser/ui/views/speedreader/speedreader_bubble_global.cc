@@ -98,7 +98,9 @@ void SpeedreaderBubbleGlobal::Init() {
 
   // Extract site title from webcontents, bolden it
   // fixme: for boldness we can do a style range on a label
-  auto site = base::ASCIIToUTF16(web_contents_->GetLastCommittedURL().host());
+  const auto host = web_contents_->GetLastCommittedURL().host();
+  DCHECK(!host.empty());
+  auto site = base::ASCIIToUTF16(host);
   auto offset = site.length();
   site.append(base::ASCIIToUTF16(kSpeedreaderSeparator));
   site.append(l10n_util::GetStringUTF16(IDS_PAGE_IS_DISTILLED));
