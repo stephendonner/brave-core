@@ -8,6 +8,7 @@
 
 #include <memory>
 
+#include "include/core/SkColor.h"
 #include "ui/gfx/font.h"
 #include "ui/views/controls/link.h"
 
@@ -29,6 +30,9 @@ extern const int kBoxLayoutChildSpacing;
 
 // Separator used in StyledLabel
 extern const char kSpeedreaderSeparator[];
+
+// Reader Mode blurple color
+extern const SkColor kColorReaderBlurple;
 
 // Get fonts for Speedreader views
 gfx::FontList GetFont(int font_size,

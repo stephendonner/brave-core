@@ -43,6 +43,10 @@ constexpr int kBubbleWidth = 324;  // width is 324 pixels
 
 constexpr int kFontSizeSiteTitle = 14;  // site title font size
 
+constexpr SkColor kColorButtonTrack = SkColorSetRGB(0xe1, 0xe2, 0xf6);
+
+constexpr SkColor kColorButtonThumb = SkColorSetRGB(0x4c, 0x54, 0xd2);
+
 }  // anonymous namespace
 
 namespace speedreader {
@@ -127,6 +131,10 @@ void SpeedreaderBubbleGlobal::Init() {
   auto site_toggle_button =
       std::make_unique<views::ToggleButton>(base::BindRepeating(
           &SpeedreaderBubbleGlobal::OnButtonPressed, base::Unretained(this)));
+  // TODO(keur): We shoud be able to remove these once brave overrides
+  // views::ToggleButton globally with our own theme
+  site_toggle_button->SetThumbOnColor(kColorButtonThumb);
+  site_toggle_button->SetTrackOnColor(kColorButtonTrack);
   site_toggle_button_ =
       site_toggle_view->AddChildView(std::move(site_toggle_button));
 

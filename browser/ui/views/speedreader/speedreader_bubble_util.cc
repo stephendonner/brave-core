@@ -31,9 +31,12 @@ const char kSpeedreaderSeparator[] = " ";
 
 constexpr int kFontSizeLabel = 12;
 
+const SkColor kColorReaderBlurple = SkColorSetRGB(0x4c, 0x54, 0xd2);
+
 gfx::FontList GetFont(int font_size, gfx::Font::Weight weight) {
-  return gfx::FontList(kReaderFontFamilies, gfx::Font::NORMAL, font_size,
-                       weight);
+  auto font = gfx::FontList();
+  return font.DeriveWithSizeDelta(std::abs(font_size - font.GetFontSize()))
+      .DeriveWithWeight(weight);
 }
 
 // Create a StyledLabel that ends with a link.
@@ -51,6 +54,8 @@ std::unique_ptr<views::StyledLabel> BuildLabelWithEndingLink(
   // Setup styles
   views::StyledLabel::RangeStyleInfo style_link =
       views::StyledLabel::RangeStyleInfo::CreateForLink(callback);
+  style_link.override_color = kColorReaderBlurple;
+
   views::StyledLabel::RangeStyleInfo style_default;
   style_default.custom_font = GetFont(kFontSizeLabel);
 
