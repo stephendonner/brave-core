@@ -13,6 +13,8 @@
 #include "brave/browser/ui/views/speedreader/speedreader_bubble_single_page.h"
 #include "chrome/app/chrome_command_ids.h"
 #include "chrome/grit/generated_resources.h"
+#include "components/dom_distiller/content/browser/distillable_page_utils.h"
+#include "components/dom_distiller/content/browser/uma_helper.h"
 #include "ui/base/l10n/l10n_util.h"
 #include "ui/views/metadata/metadata_impl_macros.h"
 
@@ -24,16 +26,35 @@ SpeedreaderIconView::SpeedreaderIconView(
     : PageActionIconView(command_updater,
                          IDC_TOGGLE_SPEEDREADER,
                          icon_label_bubble_delegate,
-                         page_action_icon_delegate) {
-  SetVisible(true);  // fixme
-}
+                         page_action_icon_delegate) {}
 // pref_service_(pref_service) {}
 
 SpeedreaderIconView::~SpeedreaderIconView() = default;
 
 void SpeedreaderIconView::UpdateImpl() {
-  SetVisible(true);  // fixme: testing
-  SetLabel(base::ASCIIToUTF16("Reader Mode"));
+  auto* contents = GetWebContents();
+  if (!contents) {
+    SetVisible(false);
+    return;
+  }
+
+  if (contents != web_contents_) {
+    if (web_contents_)
+      dom_distiller::RemoveObserver(web_contents_, this);
+    web_contents_ = contents;
+    dom_distiller::AddObserver(web_contents_, this);
+  }
+
+  auto result = dom_distiller::GetLatestResult(web_contents_);
+  if (result) {
+    // fixme: check if the url matches in speedreader service
+    const bool visible = result->is_last && result->is_distillable;
+    SetVisible(visible);
+
+  } else {
+    SetVisible(false);
+  }
+  AnimateInkDrop(views::InkDropState::HIDDEN, nullptr);
 }
 
 const gfx::VectorIcon& SpeedreaderIconView::GetVectorIcon() const {
@@ -60,6 +81,11 @@ views::BubbleDialogDelegate* SpeedreaderIconView::GetBubble() const {
 
   return reinterpret_cast<LocationBarBubbleDelegateView*>(
       bubble_tab_helper->speedreader_bubble_view());
+}
+
+void SpeedreaderIconView::OnResult(
+    const dom_distiller::DistillabilityResult& result) {
+  Update();
 }
 
 BEGIN_METADATA(SpeedreaderIconView, PageActionIconView)

@@ -7,11 +7,18 @@
 #define BRAVE_BROWSER_UI_VIEWS_SPEEDREADER_SPEEDREADER_ICON_VIEW_H_
 
 #include "chrome/browser/ui/views/page_action/page_action_icon_view.h"
+#include "components/dom_distiller/content/browser/distillable_page_utils.h"
+#include "content/public/browser/web_contents_observer.h"
 #include "ui/views/metadata/metadata_header_macros.h"
+
+namespace content {
+class NavigationHandle;
+}  // namespace content
 
 class PrefService;
 
-class SpeedreaderIconView : public PageActionIconView {
+class SpeedreaderIconView : public PageActionIconView,
+                            public dom_distiller::DistillabilityObserver {
  public:
   METADATA_HEADER(SpeedreaderIconView);
   SpeedreaderIconView(CommandUpdater* command_updater,
@@ -22,18 +29,20 @@ class SpeedreaderIconView : public PageActionIconView {
   SpeedreaderIconView& operator=(const SpeedreaderIconView&) = delete;
   ~SpeedreaderIconView() override;
 
-  // PageActionIconView:
-  views::BubbleDialogDelegate* GetBubble() const override;
-  std::u16string GetTextForTooltipAndAccessibleName() const override;
-  void UpdateImpl() override;
-
  protected:
   // PageActionIconView:
   const gfx::VectorIcon& GetVectorIcon() const override;
   void OnExecuting(PageActionIconView::ExecuteSource execute_source) override;
+  views::BubbleDialogDelegate* GetBubble() const override;
+  std::u16string GetTextForTooltipAndAccessibleName() const override;
+  void UpdateImpl() override;
+
+  // dom_distiller::DistillabilityObserver:
+  void OnResult(const dom_distiller::DistillabilityResult& result) override;
 
  private:
   // PrefService* pref_service_;
+  content::WebContents* web_contents_ = nullptr;
 };
 
 #endif  // BRAVE_BROWSER_UI_VIEWS_SPEEDREADER_SPEEDREADER_ICON_VIEW_H_
