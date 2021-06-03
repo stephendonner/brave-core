@@ -11,8 +11,6 @@
 
 #include "brave/browser/speedreader/speedreader_tab_helper.h"
 #include "brave/browser/ui/tabs/brave_tab_strip_model.h"
-#include "brave/browser/ui/views/speedreader/speedreader_bubble_global.h"
-#include "brave/browser/ui/views/speedreader/speedreader_bubble_single_page.h"
 #include "brave/components/sidebar/buildflags/buildflags.h"
 #include "chrome/browser/ui/views/frame/browser_view.h"
 #include "content/public/browser/web_contents.h"
