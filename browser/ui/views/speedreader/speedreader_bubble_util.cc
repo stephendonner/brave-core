@@ -10,28 +10,9 @@
 
 #include "ui/views/controls/styled_label.h"
 
-namespace {
-
-const std::vector<std::string> kReaderFontFamilies = {
-    "Georgia",
-    "Times New Roman",
-    "Times"
-    "serif",
-};
-
-}  // anonymous namespace
-
 namespace speedreader {
 
-const int kLineHeight = 16;
-
-const int kBoxLayoutChildSpacing = 10;
-
-const char kSpeedreaderSeparator[] = " ";
-
 constexpr int kFontSizeLabel = 12;
-
-const SkColor kColorReaderBlurple = SkColorSetRGB(0x4c, 0x54, 0xd2);
 
 gfx::FontList GetFont(int font_size, gfx::Font::Weight weight) {
   auto font = gfx::FontList();

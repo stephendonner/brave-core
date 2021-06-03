@@ -53,10 +53,8 @@ namespace speedreader {
 
 SpeedreaderBubbleGlobal::SpeedreaderBubbleGlobal(
     views::View* anchor_view,
-    content::WebContents* web_contents,
     SpeedreaderTabHelper* tab_helper)
     : LocationBarBubbleDelegateView(anchor_view, nullptr),
-      web_contents_(web_contents),
       tab_helper_(tab_helper) {
   SetButtons(ui::DialogButton::DIALOG_BUTTON_NONE);
 }
@@ -102,7 +100,7 @@ void SpeedreaderBubbleGlobal::Init() {
 
   // Extract site title from webcontents, bolden it
   // fixme: for boldness we can do a style range on a label
-  const auto host = web_contents_->GetLastCommittedURL().host();
+  const auto host = tab_helper_->web_contents()->GetLastCommittedURL().host();
   DCHECK(!host.empty());
   auto site = base::ASCIIToUTF16(host);
   auto offset = site.length();
@@ -155,7 +153,7 @@ void SpeedreaderBubbleGlobal::OnButtonPressed(const ui::Event& event) {
 }
 
 void SpeedreaderBubbleGlobal::OnLinkClicked(const ui::Event& event) {
-  web_contents_->OpenURL(
+  tab_helper_->web_contents()->OpenURL(
       content::OpenURLParams(GURL("chrome://settings"), content::Referrer(),
                              WindowOpenDisposition::NEW_FOREGROUND_TAB,
                              ui::PAGE_TRANSITION_LINK, false));

@@ -27,7 +27,6 @@ class BraveBrowserWindow : public BrowserWindow {
   virtual void StartTabCycling() = 0;
 
   virtual speedreader::SpeedreaderBubbleView* ShowSpeedreaderBubble(
-      content::WebContents* contents,
       speedreader::SpeedreaderTabHelper* tab_helper,
       bool is_enabled) = 0;
 
