@@ -150,7 +150,7 @@ void BraveBrowserCommandController::InitBraveCommandState() {
   UpdateCommandEnabled(IDC_ADD_NEW_PROFILE, add_new_profile_enabled);
   UpdateCommandEnabled(IDC_OPEN_GUEST_PROFILE, open_guest_profile_enabled);
   UpdateCommandEnabled(IDC_TOGGLE_SPEEDREADER, true);
-  UpdateCommandEnabled(IDC_SHOW_SPEEDREADER_PANEL, true);
+  UpdateCommandEnabled(IDC_SPEEDREADER_ICON_ONCLICK, true);
 }
 
 void BraveBrowserCommandController::UpdateCommandForBraveRewards() {
@@ -255,7 +255,7 @@ bool BraveBrowserCommandController::ExecuteBraveCommandWithDisposition(
     case IDC_CLOSE_BRAVE_WALLET_PANEL:
       brave::CloseWalletBubble(browser_);
       break;
-    case IDC_SHOW_SPEEDREADER_PANEL:
+    case IDC_SPEEDREADER_ICON_ONCLICK:
       brave::ShowSpeedreaderBubble(browser_);
       break;
     default:

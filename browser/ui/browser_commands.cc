@@ -107,6 +107,12 @@ void ShowSpeedreaderBubble(Browser* browser) {
     WebContents* contents = browser->tab_strip_model()->GetActiveWebContents();
     if (contents) {
       auto* tab_helper = speedreader::SpeedreaderTabHelper::Get(contents);
+      if (!tab_helper->IsSpeedreaderEnabled()) {
+        // Tell the tab helper to enable the Speedreader for one request, then
+        // reload the webcontents.
+        tab_helper->SingleShotNextRequest();
+        contents->GetController().Reload(content::ReloadType::NORMAL, false);
+      }
       tab_helper->ShowBubble();
     }
   }

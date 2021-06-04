@@ -4,6 +4,7 @@
 // you can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include "brave/browser/ui/views/speedreader/speedreader_icon_view.h"
+#include <string>
 
 #include "base/strings/utf_string_conversions.h"
 #include "brave/app/brave_command_ids.h"
@@ -23,7 +24,7 @@ SpeedreaderIconView::SpeedreaderIconView(
     PageActionIconView::Delegate* page_action_icon_delegate,
     PrefService* pref_service)
     : PageActionIconView(command_updater,
-                         IDC_TOGGLE_SPEEDREADER,
+                         IDC_SPEEDREADER_ICON_ONCLICK,
                          icon_label_bubble_delegate,
                          page_action_icon_delegate) {}
 // pref_service_(pref_service) {}
@@ -44,16 +45,26 @@ void SpeedreaderIconView::UpdateImpl() {
     dom_distiller::AddObserver(web_contents_, this);
   }
 
+  auto* tab_helper = speedreader::SpeedreaderTabHelper::Get(web_contents_);
+  const bool is_distilled = tab_helper->IsDistilledPage();
   auto result = dom_distiller::GetLatestResult(web_contents_);
   if (result) {
     // fixme: check if the url matches in speedreader service
-    const bool visible = result->is_last && result->is_distillable;
+    const bool visible =
+        (result->is_last && result->is_distillable) || is_distilled;
     SetVisible(visible);
-
   } else {
     SetVisible(false);
   }
-  AnimateInkDrop(views::InkDropState::HIDDEN, nullptr);
+
+  if (GetVisible() && is_distilled) {
+    // fixme: support speedreader state
+    SetLabel(base::ASCIIToUTF16("Reader Mode"));
+    label()->SetVisible(true);
+  } else {
+    label()->SetVisible(false);
+  }
+  // AnimateInkDrop(views::InkDropState::HIDDEN, nullptr);
 }
 
 const gfx::VectorIcon& SpeedreaderIconView::GetVectorIcon() const {

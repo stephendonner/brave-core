@@ -266,8 +266,7 @@ void BraveContentBrowserClient::BrowserURLHandlerCreated(
 void BraveContentBrowserClient::RenderProcessWillLaunch(
     content::RenderProcessHost* host) {
   Profile* profile = Profile::FromBrowserContext(host->GetBrowserContext());
-  BraveRendererUpdaterFactory::GetForProfile(profile)
-      ->InitializeRenderer(host);
+  BraveRendererUpdaterFactory::GetForProfile(profile)->InitializeRenderer(host);
 
   ChromeContentBrowserClient::RenderProcessWillLaunch(host);
 }
