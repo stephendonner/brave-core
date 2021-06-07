@@ -602,6 +602,53 @@ BATClassAdsBridge(BOOL, isDebug, setDebug, g_is_debug)
                            static_cast<ads::NewTabPageAdEventType>(eventType));
 }
 
+- (void)inlineContentAdsWithDimensions:
+    (NSString*)dimensions,
+     completion:(void (^)(BOOL success,
+              NSString* uuid,
+              NSString* creativeInstanceId,
+              NSString* title,
+              NSString* description,
+              NSString* imageUrl,
+              NSString* dimensions,
+              NSString* ctaText,
+              NSString* targetUrl))completion {
+  if (![self isAdsServiceRunning]) {
+    return;
+  }
+  ads->GetInlineContentAd(dimensions.UTF8String, ^(const bool success,
+                                        const ads::InlineContentAdInfo& ad) {
+    NSString* bridgedUuid = [NSString stringWithUTF8String:ad.uuid.c_str()];
+    NSString* bridgedCreativeInstanceId =
+        [NSString stringWithUTF8String:ad.creative_instance_id.c_str()];
+    NSString* bridgedTitle = [NSString stringWithUTF8String:ad.title.c_str()];
+    NSString* bridgedDescription =
+        [NSString stringWithUTF8String:ad.description.c_str()];
+    NSString* bridgedImageUrl =
+        [NSString stringWithUTF8String:ad.image_url.c_str()];
+    NSString* bridgedDimensions =
+        [NSString stringWithUTF8String:ad.dimensions.c_str()];
+    NSString* bridgedCtaText =
+        [NSString stringWithUTF8String:ad.cta_text.c_str()];
+    NSString* bridgedTargetUrl =
+        [NSString stringWithUTF8String:ad.target_url.c_str()];
+
+    completion(success, bridgedUuid, bridgedCreativeInstanceId, bridgedTitle,
+        bridgedDescription, bridgedImageUrl, bridgedDimensions, bridgedCtaText,
+            bridgedTargetUrl);
+  });
+}
+
+- (void)reportInlineContentAdEvent:(NSString*)uuid
+                creativeInstanceId:(NSString*)creativeInstanceId
+                         eventType:(BATInlineContentAdEventType)eventType {
+  if (![self isAdsServiceRunning]) {
+    return;
+  }
+  ads->OnInlineContentAdEvent(uuid.UTF8String, creativeInstanceId.UTF8String,
+      static_cast<ads::BraveAdsInlineContentAdEventType>(eventType));
+}
+
 - (void)reportPromotedContentAdEvent:(NSString*)uuid
                   creativeInstanceId:(NSString*)creativeInstanceId
                            eventType:(BATPromotedContentAdEventType)eventType {

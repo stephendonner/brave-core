@@ -8,6 +8,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, BATAdsConfirmationType) {
   BATAdsConfirmationTypeUndefined,  // = ads::ConfirmationType::kUndefined
+  BATAdsConfirmationTypeServed,     // = ads::ConfirmationType::kServed
   BATAdsConfirmationTypeClicked,    // = ads::ConfirmationType::kClicked
   BATAdsConfirmationTypeDismissed,  // = ads::ConfirmationType::kDismissed
   BATAdsConfirmationTypeViewed,     // = ads::ConfirmationType::kViewed
