@@ -55,6 +55,8 @@ bool ShouldUseEphemeralStorage(
     return;                                                                    \
   }
 
+#define IsCookieAccessible IsEphemeralCookieAccessible
 #define IsCookieAccessAllowed IsEphemeralCookieAccessAllowed
 #include "../../../../services/network/restricted_cookie_manager.cc"
 #undef IsCookieAccessAllowed
+#undef IsCookieAccessible
