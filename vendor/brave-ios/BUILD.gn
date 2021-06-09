@@ -65,6 +65,7 @@ ios_framework_bundle("brave_rewards_ios_framework") {
     "//sql",
     "//url",
     "//components/os_crypt",
+    "//brave/components/ipfs",
     ":resources",
     ":coredata",
     ":ledger_mojo_gen_wrappers",

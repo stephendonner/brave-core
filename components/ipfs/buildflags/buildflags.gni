@@ -1,5 +1,5 @@
 declare_args() {
-  ipfs_enabled = !is_ios
+  ipfs_enabled = true
 }
 
 declare_args() {
